@@ -1,0 +1,14 @@
+import { Router } from 'express';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { z } from 'zod';
+import { prisma } from '../lib/prisma.js';
+import { authenticate } from '../middleware/auth.js';
+const router=Router();
+const registerSchema=z.object({fullName:z.string().min(2).max(100),country:z.enum(['Rwanda','Kenya']),contact:z.string().min(5).max(150),password:z.string().min(8).max(72),role:z.enum(['BUYER','SELLER']).default('BUYER')});
+const loginSchema=z.object({contact:z.string().min(5),password:z.string().min(1)});
+const publicUser=u=>({id:u.id,fullName:u.fullName,country:u.country,contact:u.contact,role:u.role,isActive:u.isActive});
+router.post('/register',async(req,res,next)=>{try{const data=registerSchema.parse(req.body);if(!process.env.JWT_SECRET)throw new Error('JWT_SECRET ntiyashyizwe muri backend/.env.');const passwordHash=await bcrypt.hash(data.password,12);const {password,...userData}=data;const user=await prisma.user.create({data:{...userData,passwordHash}});const token=jwt.sign({},process.env.JWT_SECRET,{subject:user.id,expiresIn:'7d'});res.status(201).json({user:publicUser(user),token});}catch(e){if(e.code==='P2002')return res.status(409).json({error:'Contact already registered'});next(e);}});
+router.post('/login',async(req,res,next)=>{try{const data=loginSchema.parse(req.body);if(!process.env.JWT_SECRET)throw new Error('JWT_SECRET ntiyashyizwe muri backend/.env.');const user=await prisma.user.findUnique({where:{contact:data.contact}});if(!user||!user.isActive||!(await bcrypt.compare(data.password,user.passwordHash)))return res.status(401).json({error:'Incorrect contact or password'});const token=jwt.sign({},process.env.JWT_SECRET,{subject:user.id,expiresIn:'7d'});res.json({user:publicUser(user),token});}catch(e){next(e);}});
+router.get('/me',authenticate,async(req,res)=>res.json({user:req.user}));
+export default router;
