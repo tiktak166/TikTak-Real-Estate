@@ -3,7 +3,8 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
-import { ZodError } from 'zod';\nimport multer from 'multer';
+import { ZodError } from 'zod';
+import multer from 'multer';
 import { prisma } from './lib/prisma.js';
 import authRoutes from './routes/auth.js';
 import listingRoutes from './routes/listings.js';
@@ -14,6 +15,7 @@ app.use(helmet());app.use(cors({origin:process.env.CLIENT_ORIGIN?.split(',')||tr
 app.use('/api',rateLimit({windowMs:15*60*1000,limit:300,standardHeaders:true,legacyHeaders:false}));
 app.get('/api/health',(req,res)=>res.json({status:'ok',service:'TikTak Real Estate API',time:new Date().toISOString()}));
 app.use('/api/auth',authRoutes);app.use('/api/listings',listingRoutes);app.use('/api/deals',dealRoutes);app.use('/api/admin',adminRoutes);
-app.use((err,req,res,next)=>{if(err instanceof ZodError)return res.status(400).json({error:'Validation failed',details:err.issues.map(i=>({field:i.path.join('.'),message:i.message}))});if(err instanceof multer.MulterError)return res.status(400).json({error:err.code==='LIMIT_FILE_SIZE'?'Ifoto ntigomba kurenza 10 MB.':'Hitamo amafoto atarenze 10.'});\nif(err.code==='P2025')return res.status(404).json({error:'Record not found'});console.error(err);res.status(err.status||500).json({error:process.env.NODE_ENV==='production'?'Internal server error':err.message});});
+app.use((err,req,res,next)=>{if(err instanceof ZodError)return res.status(400).json({error:'Validation failed',details:err.issues.map(i=>({field:i.path.join('.'),message:i.message}))});if(err instanceof multer.MulterError)return res.status(400).json({error:err.code==='LIMIT_FILE_SIZE'?'Ifoto ntigomba kurenza 10 MB.':'Hitamo amafoto atarenze 10.'});
+if(err.code==='P2025')return res.status(404).json({error:'Record not found'});console.error(err);res.status(err.status||500).json({error:process.env.NODE_ENV==='production'?'Internal server error':err.message});});
 const port=Number(process.env.PORT||4000);const server=app.listen(port,()=>console.log(`TikTak API running on http://localhost:${port}`));
 const shutdown=async()=>{server.close();await prisma.$disconnect();process.exit(0)};process.on('SIGINT',shutdown);process.on('SIGTERM',shutdown);
