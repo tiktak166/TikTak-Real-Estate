@@ -1,69 +1,103 @@
-# TikTak Real Estate — Stage 7C (Cloudinary + Live Admin)
+# TikTak Real Estate — Stage 7 (Backend foundation)
 
-TikTak Real Estate is a local-development real-estate marketplace for land, houses and cars in Rwanda and Kenya. The project contains a static frontend, an Express API, PostgreSQL and Prisma, JWT authentication, Cloudinary image storage, customer messaging and an Admin dashboard.
+Iyi package ikomeza frontend ya Stage 6 kandi ikongeramo API backend ya Node.js/Express, PostgreSQL na Prisma.
 
-## Features
+## Ibyo Stage 7 itangiriraho
+- User registration/login na JWT; password zibikwa zikoresheje bcrypt hash.
+- Roles: ADMIN, AGENT, BUYER, SELLER.
+- Listings: gutangaza, kureba ibyemejwe, kureba ibyawe, no kwemeza/guhagarika nka Admin.
+- Deals: gutangiza offer, gukurikirana status, kubara commission ya 5%.
+- Admin overview, users na commission; kwandika ubwishyu nyuma yo kubugenzura.
+- Helmet, CORS, rate limiting, input validation.
 
-- Public homepage shows only listings approved by Admin; supports category, country and location filtering.
-- Registration and login with BUYER / SELLER roles; password hashes use bcrypt and sessions use JWT.
-- SELLER / AGENT / ADMIN can submit listings; listing photos upload securely to Cloudinary (up to 10 images, 10 MB each; JPG, PNG, WEBP and AVIF).
-- Admin can review listings, manage customers, view offers/deals, read and reply to customer messages, and manage listing photos.
-- Buyers can submit offers and view their own deals and messages in the customer dashboard.
-- Admin advances deals through negotiation and sale agreement. A listing becomes SOLD only when a deal is marked SALE_COMPLETED.
-- TikTak's 5% commission is created only when a sale is completed. Admin records a payment reference only after verifying receipt independently; no payment gateway is integrated.
-- Favorites are stored in the customer's browser and displayed in the customer dashboard.
-- Security middleware includes Helmet, CORS, API rate limiting, input validation and role-based authorization.
+## Ibisabwa
+- Node.js 20+
+- PostgreSQL 14+
 
-## Requirements
+## Gutangiza backend
+1. Fungura terminal muri `backend/`.
+2. Kora `npm install`.
+3. Koporora `.env.example` uyite `.env`, uhindure `DATABASE_URL` na `JWT_SECRET`.
+4. Kora database `tiktak_real_estate` muri PostgreSQL.
+5. Kora `npm run db:generate`.
+6. Kora `npm run db:migrate -- --name init`.
+7. Tangiza server ukoresheje `npm run dev`.
+8. Reba `http://localhost:4000/api/health`.
 
-- Node.js 20 or newer (the project has also been used with Node.js 26).
-- PostgreSQL 14 or newer.
-- A Cloudinary account for image uploads.
+## Gukora Admin wa mbere
+Ongeramo ibi muri `.env` mbere yo gukoresha seed:
+```
+ADMIN_NAME="TikTak Admin"
+ADMIN_CONTACT="admin@example.com"
+ADMIN_PASSWORD="ChangeThisStrongPassword123!"
+```
+Hanyuma ukoreshe `npm run db:seed`. Ntukoreshe password y'urugero kuri production.
 
-## Backend setup
+## API routes
+- `POST /api/auth/register` — `{fullName,country,contact,password}`
+- `POST /api/auth/login` — `{contact,password}`
+- `GET /api/auth/me` — Bearer token
+- `GET /api/listings` — public approved listings; filters: `country`, `type`, `location`
+- `POST /api/listings` — SELLER/AGENT/ADMIN
+- `GET /api/listings/mine` — authenticated
+- `PATCH /api/listings/:id/status` — ADMIN
+- `POST /api/deals` — BUYER/ADMIN `{listingId,price}`
+- `GET /api/deals` — user's deals or all for ADMIN
+- `PATCH /api/deals/:id/status` — ADMIN
+- `GET /api/admin/overview`, `/users`, `/commissions` — ADMIN
+- `PATCH /api/admin/commissions/:id/paid` — ADMIN `{reference}` after manual payment verification
 
-1. Open a terminal in `backend/`.
-2. Run `npm.cmd install` in Windows PowerShell (or `npm install` in other shells).
-3. Copy `.env.example` to `.env` and set `DATABASE_URL`, a long random `JWT_SECRET`, Cloudinary credentials and Admin seed credentials.
-4. Create the PostgreSQL database named `tiktak_real_estate` (or adjust `DATABASE_URL`).
-5. Run `npm.cmd run db:generate`.
-6. For a new database, run `npm.cmd run db:migrate -- --name init`. For an existing Stage 7C database that is already migrated, do not rerun an initial migration; use `npm.cmd run db:generate` only unless a new schema migration is explicitly supplied.
-7. Run `npm.cmd run db:seed` once to create/update the Admin account using `ADMIN_CONTACT` and `ADMIN_PASSWORD` from `.env`.
-8. Start the API with `npm.cmd run dev`.
-9. Confirm `http://localhost:4000/api/health` returns `{ "status": "ok" }`.
+## Stage 7A — Frontend/API integration
+- `frontend/api.js` ni API client ihuriweho; default API URL ni `http://localhost:4000/api` (ushobora kuyihindura muri browser localStorage key `tiktak-api-base`).
+- Registration/login bihuzwa na API kandi JWT ibikwa muri browser localStorage.
+- Abiyandikisha bahitamo BUYER cyangwa SELLER; ntibashobora kwigenera ADMIN/AGENT.
+- Listing submission yoherezwa kuri API kandi igatangira status ya PENDING.
+- Homepage ikurura gusa listings zemejwe na Admin.
+- Admin dashboard, deals, messages, image uploads na payment gateway biracyari mu byiciro bizakurikiraho. Ubu backend foundation irateguwe ariko ntiratangizwa kuri server yawe, kandi database credentials ntizashyizwe muri ZIP.
 
-## Frontend setup
+Nta payment gateway cyangwa Cloudinary integration irimo; ntitwemeza ko amafaranga yishyuwe keretse Admin amaze kugenzura reference.
 
-1. Open a second terminal in `frontend/`.
-2. Start the static server, for example:
-   `npx.cmd --yes http-server . -p 5501 -c-1`
-3. Keep both backend and frontend terminals running.
-4. Open `http://127.0.0.1:5501/index.html`.
-5. Sign in to the Admin account at `account.html#login`; after login an ADMIN is redirected to `admin.html`.
 
-In development, the API allows localhost and 127.0.0.1 origins on local ports when `NODE_ENV` is not `production`. For deployment, set `CLIENT_ORIGIN` to the exact HTTPS frontend origin(s).
+## Gukoresha frontend ihujwe na API
+1. Tangiza backend ukoresheje amabwiriza ari hejuru.
+2. Fungura `frontend/` muri VS Code, ukoreshe Live Server kuri `http://localhost:5500` (cyangwa uhindure `CLIENT_ORIGIN` muri `.env` ijyane n'aho uyitangirije). Ntukayifungure ukoresheje `file://`.
+3. Fungura `http://localhost:5500/index.html`.
+4. Niba API iri ku yindi URL, muri browser developer console shyiramo `localStorage.setItem('tiktak-api-base','https://api.urubuga-rwawe.com/api')` hanyuma wongere ufungure page.
+5. Kuri registration, hitamo SELLER niba ushaka gutangaza umutungo; BUYER ntashobora kohereza listings.
 
-## Environment variables
+**Imipaka y'iyi milestone:** Amafoto/video ntibirakorwa kandi byahagaritswe ku ifishi kugira ngo bitange amakuru atari yo. Admin dashboard iracyakoresha demo data; kuyihuza na API ni intambwe ikurikira.
 
-See `backend/.env.example`. Never put the real `.env` file in a ZIP, source control or a public chat. Do not share `JWT_SECRET` or `CLOUDINARY_API_SECRET`.
 
-## Main API routes
+## Stage 7B – Admin dashboard integration
 
-- `POST /api/auth/register`, `POST /api/auth/login`, `GET /api/auth/me`
-- `GET /api/listings`, `POST /api/listings`, `GET /api/listings/mine`
-- `POST /api/listings/:id/images`
-- `POST /api/deals`, `GET /api/deals`, `PATCH /api/deals/:id/status`
-- `POST /api/messages`, `GET /api/messages/mine`, `GET /api/messages` (Admin), `POST /api/messages/:userId/reply` (Admin)
-- `GET /api/admin/overview`, `/listings`, `/users`, `/commissions`, `/images`
-- `PATCH /api/admin/listings/:id/status`, `PATCH /api/admin/users/:id/active`
-- `PATCH /api/admin/commissions/:id/paid`, `DELETE /api/admin/images/:id`
+The admin Listings and Clients screens now read and update live PostgreSQL data through the protected `/api/admin` endpoints. Sign in with an account whose role is `ADMIN`, then open `frontend/admin.html`.
 
-All Admin routes require a valid JWT for an active ADMIN account.
+New admin endpoints:
+- `GET /api/admin/listings` – list all listings with seller details.
+- `PATCH /api/admin/listings/:id/status` – set `PENDING`, `APPROVED`, `REJECTED`, `PAUSED`, or `SOLD`.
+- `GET /api/admin/users` – list users.
+- `PATCH /api/admin/users/:id/active` – enable or disable a user account.
 
-## Before production deployment
+All these endpoints require a valid JWT and the `ADMIN` role. The admin frontend loads `api.js` before `admin.js`; configure the API base URL with the `tiktak-api-base` localStorage setting if the API is hosted somewhere other than `http://localhost:4000/api`.
 
-- Rotate the Cloudinary API secret that was previously exposed during development; rotate `JWT_SECRET` too if it was exposed.
-- Use a production database, backups, HTTPS, monitoring and server-side logs.
-- Set `NODE_ENV=production` and restrict `CLIENT_ORIGIN` to the real frontend domain.
-- Keep `.env`, database dumps, credentials and tokens private.
-- A payment gateway is not included. Do not mark a commission PAID until the transfer has been independently verified.
+
+## Stage 7C — Cloudinary property photos
+
+- Cloudinary SDK + secure server-side uploads.
+- SELLER/AGENT can upload photos to their own listings; ADMIN can upload to any listing.
+- Maximum 10 images per listing, JPG/PNG/WEBP/AVIF, maximum 10 MB each.
+- Image URLs and Cloudinary public IDs/metadata are stored in PostgreSQL (`ListingImage`).
+- Public approved listings return their image gallery; homepage shows the first image.
+- Admin image endpoints: `GET /api/admin/images` and `DELETE /api/admin/images/:id`.
+- Upload endpoint: `POST /api/listings/:id/images`, multipart form-data field `images`.
+
+### Setup
+1. In `backend/`, run `npm install`.
+2. Copy `.env.example` to `.env`.
+3. Put your Cloudinary Cloud Name, API Key and API Secret in `.env`. Never commit `.env` or share the API Secret.
+4. Run `npm run db:generate`.
+5. Run `npm run db:migrate -- --name add_listing_images`.
+6. Start with `npm run dev`, then open the frontend with Live Server.
+7. Sign in as SELLER, create a listing, select photos and submit. Admin approval is still required before the listing and photos appear publicly.
+
+Video uploads and a visual admin gallery screen are not included in this milestone; the protected admin list/delete API is available.

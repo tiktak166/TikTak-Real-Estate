@@ -37,10 +37,3 @@
 .calc-result small{display:block;color:#735400;font-size:11px}
 .calc-result strong{display:block;font-size:22px;margin-top:4px;color:#171717}
 @media(max-width:760px){.calc-row{grid-template-columns:1fr}}
-
-/* Listings: readable actions and resilient photo thumbnails */
-.row-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:112px}
-.row-actions .mini{white-space:nowrap;line-height:1.35}
-.listing-thumb-link{display:inline-flex;width:88px;height:64px;overflow:hidden;border-radius:8px;background:#f0f0ed;align-items:center;justify-content:center}
-.listing-thumb{display:block;width:88px;height:64px;object-fit:cover}
-#listingRows td{vertical-align:middle}

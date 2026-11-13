@@ -1,7 +1,9 @@
+
 <!doctype html>
 <html lang="rw">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TikTak Real Estate | Admin Dashboard</title>
 <link rel="stylesheet" href="admin.css">
 </head>
@@ -10,69 +12,191 @@
   <a class="brand" href="index.html"><span class="mark">T</span><span>TikTak <b>Real Estate</b><small>OWNER CONSOLE</small></span></a>
   <div class="side-label">MAIN MENU</div>
   <button class="nav active" data-page="overview">▦ <span>Incamake / Overview</span></button>
-  <button class="nav" data-page="listings">⌂ <span>Amatangazo / Listings</span></button>
-  <button class="nav" data-page="requests">✉ <span>Ibyifuzo / Offers</span></button>
+  <button class="nav" data-page="listings">⌂ <span>Amatangazo / Listings</span><i>12</i></button>
+  <button class="nav" data-page="requests">✉ <span>Ibyifuzo / Requests</span><i class="dot"></i></button>
   <button class="nav" data-page="clients">♙ <span>Abakiriya / Clients</span></button>
   <button class="nav" data-page="deals">⇄ <span>Amasezerano / Deals</span></button>
   <button class="nav" data-page="commissions">₣ <span>Komisiyo / Commission</span></button>
   <div class="side-label tools-label">MANAGEMENT</div>
   <button class="nav" data-page="messages">▤ <span>Ubutumwa / Messages</span></button>
-  <button class="nav" data-page="images">▧ <span>Amafoto / Images</span></button>
   <button class="nav" data-page="reports">⚑ <span>Raporo / Reports</span></button>
   <a class="back-link" href="index.html">← Reba urubuga / View website</a>
-  <button class="nav" id="logoutButton">↪ <span>Sohoka / Logout</span></button>
-  <div class="side-foot">TikTak Real Estate<br><span id="adminIdentity">Admin account</span></div>
+  <div class="side-foot">TikTak Real Estate<br><span>Owner access · Demo data</span></div>
 </aside>
+
 <main class="main">
-  <header class="topbar"><div><div class="crumb">TIKTAK / ADMIN</div><h1 id="pageTitle">Incamake y'ubucuruzi</h1></div><div class="top-actions"><span class="today" id="systemStatus">Ihuza ririmo kugenzurwa...</span><button class="avatar" id="adminAvatar">A</button></div></header>
+<header class="topbar">
+  <div><div class="crumb">TIKTAK / ADMIN</div><h1 id="pageTitle">Incamake y'ubucuruzi</h1></div>
+  <div class="top-actions"><span class="today">● Sisitemu iri muri demo</span><button class="avatar">A</button></div>
+</header>
 
-  <section id="overview" class="page active">
-    <div class="welcome"><div><p class="eyebrow">OWNER DASHBOARD</p><h2>Murakaza neza muri TikTak 👋</h2><p>Imibare iri hano iva muri database ya TikTak.</p></div><button class="primary" onclick="showPage('listings')">+ Reba amatangazo</button></div>
-    <div class="stats">
-      <article class="stat"><span>Amatangazo yose</span><strong id="statListings">—</strong><small>Database</small><b class="stat-icon">⌂</b></article>
-      <article class="stat"><span>Asuzumwa</span><strong id="statPending">—</strong><small>Asaba kwemezwa</small><b class="stat-icon">✉</b></article>
-      <article class="stat"><span>Abakiriya</span><strong id="statUsers">—</strong><small>Konti zose</small><b class="stat-icon">♙</b></article>
-      <article class="stat"><span>Amasezerano arangiye</span><strong id="statDeals">—</strong><small>Sale completed</small><b class="stat-icon">⇄</b></article>
-    </div>
-    <div class="content-grid">
-      <article class="panel"><div class="panel-head"><div><h3>Komisiyo itegerejwe</h3><p>Ibiceri bitandukanye</p></div></div><div id="overviewCommissions" class="market">Tegereza...</div></article>
-      <article class="panel"><div class="panel-head"><div><h3>Imiterere ya sisitemu</h3><p>Backend na database</p></div></div><div id="overviewConnection" class="note">Tegereza...</div></article>
-    </div>
-    <article class="panel table-panel"><div class="panel-head"><div><h3>Amatangazo aheruka</h3><p>Amakuru nyayo yo muri database</p></div><button class="subtle" onclick="showPage('listings')">Genzura amatangazo →</button></div><div class="table-wrap"><table><thead><tr><th>ID</th><th>IGICURUZWA</th><th>AHO GIHEREREYE</th><th>IGICIRO</th><th>IMITERERE</th></tr></thead><tbody id="overviewListingRows"><tr><td colspan="5">Tegereza...</td></tr></tbody></table></div></article>
-  </section>
+<section id="overview" class="page active">
+  <div class="welcome">
+    <div><p class="eyebrow">OWNER DASHBOARD</p><h2>Murakaza neza muri TikTak 👋</h2><p>Hano ni ho ucungira amatangazo, abakiriya n'ubucuruzi bwose.</p></div>
+    <button class="primary" onclick="showPage('listings')">+ Reba amatangazo</button>
+  </div>
+  <div class="stats">
+    <article class="stat"><span>Amatangazo yose</span><strong>128</strong><small class="good">↑ 8 muri iki cyumweru</small><b class="stat-icon">⌂</b></article>
+    <article class="stat"><span>Ibyifuzo bishya</span><strong>24</strong><small class="warn">Bisaba gukurikiranwa</small><b class="stat-icon">✉</b></article>
+    <article class="stat"><span>Ubucuruzi burimo gukorwa</span><strong>09</strong><small>Negotiation / Pending</small><b class="stat-icon">⇄</b></article>
+    <article class="stat"><span>Komisiyo itegerejwe</span><strong>1.8M <em>RWF</em></strong><small>5% ku bicuruzwa byemejwe</small><b class="stat-icon">₣</b></article>
+  </div>
+  <div class="content-grid">
+    <article class="panel">
+      <div class="panel-head"><div><h3>Ibikorwa biheruka</h3><p>Recent activity</p></div><button class="subtle" onclick="showPage('requests')">Reba byose →</button></div>
+      <div class="activity"><span class="activity-icon yellow">✉</span><div><b>Icyifuzo gishya cyo kugura</b><p>Ikibanza · Kigali, Gasabo</p></div><time>10 min</time></div>
+      <div class="activity"><span class="activity-icon gray">⌂</span><div><b>Itangazo rishya rikeneye kwemezwa</b><p>Inzu · Kigali, Kicukiro</p></div><time>42 min</time></div>
+      <div class="activity"><span class="activity-icon green">✓</span><div><b>Komisiyo yemejwe</b><p>Deal TTR-D004 · 250,000 RWF</p></div><time>2 h</time></div>
+      <div class="activity"><span class="activity-icon gray">♙</span><div><b>Umugurisha mushya yiyandikishije</b><p>Huye, Rwanda</p></div><time>3 h</time></div>
+    </article>
+    <article class="panel">
+      <div class="panel-head"><div><h3>Ibihugu</h3><p>Listings by market</p></div></div>
+      <div class="market"><div><span>🇷🇼 Rwanda</span><b>96</b></div><div class="bar"><i style="width:75%"></i></div></div>
+      <div class="market"><div><span>🇰🇪 Kenya</span><b>32</b></div><div class="bar"><i style="width:25%"></i></div></div>
+      <div class="note">Amafaranga agaragazwa mu ifaranga ry'igihugu cy'itangazo (RWF / KES).</div>
+    </article>
+  </div>
+  <article class="panel table-panel">
+    <div class="panel-head"><div><h3>Amatangazo aheruka</h3><p>Recent listings awaiting review</p></div><button class="subtle" onclick="showPage('listings')">Genzura amatangazo →</button></div>
+    <div class="table-wrap"><table><thead><tr><th>ID</th><th>IGICURUZWA</th><th>AHO GIHEREREYE</th><th>IGICIRO</th><th>IMITERERE</th><th>IGIKORWA</th></tr></thead><tbody><tr><td>TTR-00128</td><td>Ikibanza · 500 m²</td><td>Gasabo, Kigali</td><td>25,000,000 RWF</td><td><span class="pill pending">Isuzumwa</span></td><td><button class="mini" onclick="toast('Demo: itangazo ryemejwe')">Emeza</button></td></tr><tr><td>TTR-00127</td><td>Inzu · 4 bedrooms</td><td>Kicukiro, Kigali</td><td>85,000,000 RWF</td><td><span class="pill live">Riri ku rubuga</span></td><td><button class="mini" onclick="toast('Demo: wafunguye itangazo')">Reba</button></td></tr><tr><td>TTR-00126</td><td>Imodoka · Toyota</td><td>Nairobi, Kenya</td><td>2,400,000 KES</td><td><span class="pill live">Riri ku rubuga</span></td><td><button class="mini" onclick="toast('Demo: wafunguye itangazo')">Reba</button></td></tr></tbody></table></div>
+  </article>
+</section>
 
-  <section id="listings" class="page">
-    <div class="section-intro"><h2>Gucunga amatangazo</h2><p>Amatangazo ava muri PostgreSQL. Emeza, anga cyangwa uhagarike itangazo.</p></div>
-    <div class="filter-row"><input id="listingSearch" placeholder="Shakisha ID, izina cyangwa ahantu..."><select id="listingFilter"><option value="all">Amatangazo yose</option><option value="PENDING">Asuzumwa</option><option value="APPROVED">Yemejwe</option><option value="REJECTED">Yanzwe</option><option value="PAUSED">Yahagaritswe</option><option value="SOLD">Yagurishijwe</option></select><select id="listingCountry"><option value="all">Ibihugu byose</option><option>Rwanda</option><option>Kenya</option></select></div>
-    <div class="panel"><div class="table-wrap"><table><thead><tr><th>ID</th><th>IFOTO</th><th>IGICURUZWA</th><th>IGICIRO</th><th>AHO GIHEREREYE</th><th>IMITERERE</th><th>IGIKORWA</th></tr></thead><tbody id="listingRows"><tr><td colspan="7">Tegereza...</td></tr></tbody></table></div></div>
-    <p id="listingStatus" class="demo-hint"></p>
-  </section>
+<section id="listings" class="page">
+  <div class="section-intro">
+    <h2>Gucunga amatangazo</h2>
+    <p>Genzer(a), emeza, uhagarike cyangwa uhindure amatangazo mbere yo kuyashyira ku rubuga.</p>
+  </div>
 
-  <section id="requests" class="page">
-    <div class="section-intro"><h2>Ibyifuzo by'abaguzi</h2><p>Ibyifuzo by'ubuguzi bigaragazwa nk'amasezerano (offers) yoherejwe n'abaguzi.</p></div>
-    <div class="filter-row"><input id="requestSearch" placeholder="Shakisha deal, umukiriya cyangwa itangazo..."><select id="requestFilter"><option value="all">Ibyifuzo byose</option><option value="INTERESTED">Interested</option><option value="NEGOTIATION">Negotiation</option><option value="SALE_AGREEMENT">Sale Agreement</option><option value="SALE_COMPLETED">Sale Completed</option><option value="DISPUTED">Disputed</option></select></div>
-    <div class="panel"><div class="table-wrap"><table><thead><tr><th>DEAL</th><th>ITANGAZO</th><th>UMUGUZI</th><th>UMUGURISHA</th><th>IGICIRO</th><th>IMITERERE</th></tr></thead><tbody id="requestRows"><tr><td colspan="6">Tegereza...</td></tr></tbody></table></div></div>
-    <p id="requestStatus" class="demo-hint"></p>
-  </section>
+  <div class="panel" style="padding:20px;margin-bottom:20px">
+    <h3>+ Shyiraho itangazo rishya</h3>
+    <p>Uzuza amakuru y'umutungo, ushyiremo igiciro n'amafoto.</p>
 
-  <section id="clients" class="page"><div class="section-intro"><h2>Abakiriya</h2><p>Abagura n'abagurisha biyandikishije kuri TikTak.</p></div><div class="filter-row"><input id="clientSearch" placeholder="Shakisha izina, telefone cyangwa igihugu..."><select id="clientRole"><option value="all">Roles zose</option><option value="BUYER">Buyer</option><option value="SELLER">Seller</option><option value="AGENT">Agent</option><option value="ADMIN">Admin</option></select></div><div class="panel"><div class="table-wrap"><table><thead><tr><th>IZINA</th><th>CONTACT</th><th>IGIHUGU</th><th>ROLE</th><th>IMITERERE</th><th>IGIKORWA</th></tr></thead><tbody id="clientRows"><tr><td colspan="6">Tegereza...</td></tr></tbody></table></div></div><p id="clientStatus" class="demo-hint"></p></section>
+    <form id="createListingForm">
+      <label for="newListingType">Ubwoko bw'umutungo *</label>
+      <select id="newListingType" name="type" required>
+        <option value="">Hitamo ubwoko</option>
+        <option value="LAND">Ubutaka / Land</option>
+        <option value="HOUSE">Inzu / House</option>
+        <option value="CAR">Imodoka / Car</option>
+      </select>
 
-  <section id="deals" class="page">
-    <div class="section-intro"><h2>Amasezerano y'ubucuruzi</h2><p>Kurikirana intambwe z'igurisha. Iyo uhisemo SALE_COMPLETED, itangazo rihinduka SOLD kandi komisiyo ya 5% ikabikwa.</p></div>
-    <div class="filter-row"><input id="dealSearch" placeholder="Shakisha Deal ID cyangwa igicuruzwa..."><select id="dealFilter"><option value="all">Ibyiciro byose</option><option value="INTERESTED">Interested</option><option value="NEGOTIATION">Negotiation</option><option value="SALE_AGREEMENT">Sale Agreement</option><option value="SALE_COMPLETED">Sale Completed</option><option value="DISPUTED">Disputed</option></select></div>
-    <div class="panel"><div class="table-wrap"><table><thead><tr><th>DEAL ID</th><th>IGICURUZWA</th><th>UMUGUZI</th><th>IGICIRO</th><th>5% KOMISIYO</th><th>INTAMBWE</th></tr></thead><tbody id="dealRows"><tr><td colspan="6">Tegereza...</td></tr></tbody></table></div></div>
-  </section>
+      <div id="transactionTypeGroup" hidden>
+        <label for="newTransactionType">Uko inzu itangwa *</label>
+        <select id="newTransactionType" name="transactionType">
+          <option value="SALE">Kugurisha / For Sale</option>
+          <option value="RENT">Ubukode / For Rent</option>
+        </select>
+      </div>
 
-  <section id="commissions" class="page"><div class="section-intro"><h2>Komisiyo ya TikTak</h2><p>Komisiyo ya 5% ibarwa ku masezerano yemejwe ko arangiye.</p></div><div class="stats"><article class="stat"><span>Itegerejwe · RWF</span><strong id="commissionPendingRwf">—</strong></article><article class="stat"><span>Itegerejwe · KES</span><strong id="commissionPendingKes">—</strong></article><article class="stat"><span>Yishyuwe · RWF</span><strong id="commissionPaidRwf">—</strong></article><article class="stat"><span>Yishyuwe · KES</span><strong id="commissionPaidKes">—</strong></article></div><div class="panel"><div class="table-wrap"><table><thead><tr><th>DEAL</th><th>ITANGAZO</th><th>UMUGURISHA</th><th>AMAFARANGA</th><th>IMITERERE</th><th>IGIKORWA</th></tr></thead><tbody id="commissionRows"><tr><td colspan="6">Tegereza...</td></tr></tbody></table></div></div><p id="commissionStatus" class="demo-hint">Kwishyura byemezwa nyuma yo kugenzura ko amafaranga yageze kuri konti.</p></section>
+      <label for="newListingTitle">Izina ry'itangazo *</label>
+      <input id="newListingTitle" name="title" type="text" minlength="5" maxlength="140" required placeholder="Urugero: Inzu nziza i Kigali">
 
-  <section id="messages" class="page"><div class="section-intro"><h2>Ubutumwa bwa TikTak</h2><p>Ubutumwa bwoherejwe n'abakiriya nyakuri bubikwa muri database.</p></div><div class="panel" id="messageRows">Tegereza...</div><p id="messageStatus" class="demo-hint"></p></section>
+      <label for="newListingCountry">Igihugu *</label>
+      <select id="newListingCountry" name="country" required>
+        <option value="">Hitamo igihugu</option>
+        <option value="Rwanda">Rwanda</option>
+        <option value="Kenya">Kenya</option>
+      </select>
 
-  <section id="images" class="page"><div class="section-intro"><h2>Amafoto y'amatangazo</h2><p>Reba amafoto abitswe muri Cloudinary, uyasibe gusa iyo ubyemeje.</p></div><div class="panel"><div class="table-wrap"><table><thead><tr><th>IFOTO</th><th>ITANGAZO</th><th>UBWOKO</th><th>IGIKORWA</th></tr></thead><tbody id="imageRows"><tr><td colspan="4">Tegereza...</td></tr></tbody></table></div></div><p id="imageStatus" class="demo-hint"></p></section>
+      <label for="newListingProvince">Intara / Province / County *</label>
+      <input id="newListingProvince" name="province" required placeholder="Urugero: Kigali">
 
-  <section id="reports" class="page"><div class="section-intro"><h2>Raporo n'isesengura</h2><p>Incamake y'ibikorwa byabitswe muri database.</p></div><div class="panel" id="reportContent">Raporo irimo gutegurwa...</div></section>
-  <footer>© TikTak Real Estate · Admin dashboard · Live database</footer>
+      <label for="newListingDistrict">Akarere / District *</label>
+      <input id="newListingDistrict" name="district" required placeholder="Urugero: Gasabo">
+
+      <label for="newListingLocality">Umurenge / Agace / Locality *</label>
+      <input id="newListingLocality" name="locality" required placeholder="Urugero: Kimironko">
+
+      <label for="newListingPrice">Igiciro *</label>
+      <input id="newListingPrice" name="price" type="number" min="1" step="0.01" required placeholder="Andika igiciro">
+
+      <label for="newListingCurrency">Ifaranga *</label>
+      <select id="newListingCurrency" name="currency" required>
+        <option value="RWF">RWF</option>
+        <option value="KES">KES</option>
+      </select>
+
+      <label for="newListingDescription">Ibisobanuro birambuye *</label>
+      <textarea id="newListingDescription" name="description" minlength="20" maxlength="5000" rows="5" required placeholder="Sobanura umutungo, uko umeze n'ibindi by'ingenzi..."></textarea>
+
+      <label for="newListingImages">Amafoto y'umutungo (nibura 1, ntarenze 10) *</label>
+      <input id="newListingImages" name="images" type="file" accept="image/*" multiple required>
+      <p class="demo-hint">Hitamo amafoto 1 kugeza kuri 10. Amafoto azoherezwa kuri TikTak.</p>
+
+      <button type="submit" class="primary" id="createListingButton">Bika itangazo</button>
+      <p id="createListingStatus" class="demo-hint" aria-live="polite"></p>
+    </form>
+  </div>
+
+  <div class="filter-row">
+    <input id="listingSearch" placeholder="Shakisha ID, izina cyangwa ahantu...">
+    <select id="listingFilter">
+      <option value="all">Amatangazo yose</option>
+      <option value="PENDING">Asuzumwa</option>
+      <option value="APPROVED">Yemejwe</option>
+      <option value="REJECTED">Yanzwe</option>
+      <option value="PAUSED">Yahagaritswe</option>
+      <option value="SOLD">Yagurishijwe</option>
+    </select>
+    <select id="listingCountry">
+      <option value="all">Ibihugu byose</option>
+      <option>Rwanda</option>
+      <option>Kenya</option>
+    </select>
+  </div>
+
+  <div class="panel"><div class="table-wrap"><table><thead><tr><th>ID</th><th>IGICURUZWA</th><th>IGICIRO</th><th>AHO GIHEREREYE</th><th>IMITERERE</th><th>IGIKORWA</th></tr></thead><tbody id="listingRows"></tbody></table></div></div>
+  <p class="demo-hint">Amatangazo mashya azajya abikwa muri database, ategereze kwemezwa na Admin.</p>
+</section>
+
+<section id="requests" class="page">
+  <div class="section-intro"><h2>Ibyifuzo by'abaguzi</h2><p>Kurikirana buri cyifuzo kandi wandike intambwe igezeho. Amakuru y'umuguzi aboneka kuri Admin gusa.</p></div>
+  <div class="filter-row"><input id="requestSearch" placeholder="Shakisha REQ, izina cyangwa itangazo..."><select id="requestFilter"><option value="all">Ibyifuzo byose</option><option>Gishya</option><option>Turimo kuvugana</option><option>Negotiation</option><option>Byarangiye</option></select></div>
+  <div class="panel" id="requestRows"></div><p class="demo-hint">Ibyifuzo biri hano ni urugero; nta mukiriya nyakuri woherejweho ubutumwa.</p>
+</section>
+
+<section id="clients" class="page">
+  <div class="section-intro"><h2>Abakiriya</h2><p>Abagura n'abagurisha biyandikishije kuri TikTak. Iyi mibare iva muri database.</p></div>
+  <div class="filter-row"><input id="clientSearch" placeholder="Shakisha izina, telefone cyangwa igihugu..."><select id="clientRole"><option value="all">Roles zose</option><option value="BUYER">Buyer</option><option value="SELLER">Seller</option><option value="AGENT">Agent</option><option value="ADMIN">Admin</option></select></div>
+  <div class="panel"><div class="table-wrap"><table><thead><tr><th>IZINA</th><th>CONTACT</th><th>IGIHUGU</th><th>ROLE</th><th>IMITERERE</th><th>IGIKORWA</th></tr></thead><tbody id="clientRows"><tr><td colspan="6">Tegereza...</td></tr></tbody></table></div></div>
+  <p id="clientStatus" class="demo-hint">Abakiriya nyakuri bazagaragara nyuma yo kwinjira nka Admin.</p>
+</section>
+
+<section id="deals" class="page">
+  <div class="section-intro"><h2>Amasezerano y'ubucuruzi</h2><p>Kurikirana intambwe z'igurisha kuva ku biganiro kugeza ryemejwe ko rirangiye.</p></div>
+  <div class="filter-row"><input id="dealSearch" placeholder="Shakisha Deal ID cyangwa igicuruzwa..."><select id="dealFilter"><option value="all">Ibyiciro byose</option><option>Interested</option><option>Negotiation</option><option>Sale Agreement</option><option>Sale Completed</option><option>Disputed</option></select></div>
+  <div class="panel"><div class="table-wrap"><table><thead><tr><th>DEAL ID</th><th>IGICURUZWA</th><th>IGICIRO</th><th>5% KOMISIYO</th><th>INTAMBWE</th><th>IGIKORWA</th></tr></thead><tbody id="dealRows"></tbody></table></div></div>
+  <div class="panel calculator"><h3>Ibariro rya komisiyo ya 5%</h3><p>Komisiyo ibarwa ku giciro cyose cy'igurisha kandi yishyurwa n'umugurisha.</p><div class="calc-row"><label>Igiciro cya nyuma<input id="salePrice" type="number" min="0" placeholder="Urugero: 1000000"></label><label>Igihugu / Ifaranga<select id="saleCurrency"><option value="RWF">Rwanda · RWF</option><option value="KES">Kenya · KES</option></select></label><div class="calc-result"><small>Komisiyo ya TikTak (5%)</small><strong id="commissionResult">0 RWF</strong></div></div></div>
+  <p class="demo-hint">Amasezerano agaragara hano ni amakuru y'igerageza. Kwemeza igurisha bigomba gushingira ku bimenyetso n'amasezerano y'impande bireba.</p>
+</section>
+
+<section id="commissions" class="page">
+  <div class="section-intro"><h2>Komisiyo ya TikTak</h2><p>Komisiyo ni 5% by'igiciro cyose cy'igurisha, yishyurwa n'umugurisha.</p></div>
+  <div class="stats"><article class="stat"><span>Yinjiye · RWF</span><strong>750,000</strong></article><article class="stat"><span>Yinjiye · KES</span><strong>150,000</strong></article><article class="stat"><span>Itegerejwe · RWF</span><strong>1,800,000</strong></article></div>
+  <div class="panel note">Iyi mibare ni urugero rwa demo. Kwakira Mobile Money cyangwa bank transfer no kwemeza ubwishyu bizakorwa nyuma yo guhuza payment provider no kugenzura konti zakira amafaranga.</div>
+  <div class="panel"><h3>Intambwe zo kwishyura</h3><ol><li>Admin yemeza ko igurisha ryarangiye.</li><li>Sisitemu ibara 5% by'igiciro cya nyuma.</li><li>Umugurisha ahabwa amabwiriza yo kwishyura.</li><li>Admin agenzura Mobile Money cyangwa bank transfer, akandika ko komisiyo yishyuwe.</li></ol><p class="demo-hint">Ntukandike ko ubwishyu bwemejwe utarabugenzura. Nta payment provider ihujwe muri iyi demo.</p></div>
+</section>
+
+<section id="messages" class="page">
+  <div class="section-intro"><h2>Ubutumwa bwa TikTak</h2><p>Admin ni we uganira n'abakiriya. Umuguzi n'umugurisha ntibandikirana kuri uru rubuga.</p></div>
+  <div class="message-layout">
+    <div class="panel inbox"><div class="panel-head"><div><h3>Inbox</h3><p>Hitamo ikiganiro</p></div></div><div id="threadList"></div></div>
+    <div class="panel chat"><div class="chat-head"><div><b id="chatName">Hitamo umukiriya</b><small id="chatMeta">Ibiganiro bya TikTak Admin</small></div><span class="pill live">Private</span></div><div id="chatMessages" class="chat-messages"><div class="empty-state">Hitamo ikiganiro kiri ibumoso kugira ngo urebe ubutumwa.</div></div><form id="replyForm" class="reply-form"><input id="replyText" placeholder="Andika igisubizo..." autocomplete="off"><button class="primary" type="submit">Ohereza</button></form></div>
+  </div>
+  <p class="demo-hint">Ubutumwa bw'igerageza bubikwa muri browser yawe gusa; nta butumwa bwoherezwa kuri telefoni cyangwa email.</p>
+</section>
+
+<section id="reports" class="page">
+  <div class="section-intro"><h2>Raporo n'isesengura</h2><p>Abasura urubuga, amatangazo arebwa cyane, ibyifuzo n'ubucuruzi.</p></div>
+  <div class="stats"><article class="stat"><span>Abasura uyu munsi</span><strong>1,240</strong></article><article class="stat"><span>Amatangazo arebwe</span><strong>3,820</strong></article><article class="stat"><span>Ibikorwa byemejwe</span><strong>14</strong></article></div>
+  <div class="panel note">Charts nyazo zizagaragaza imibare ya buri munsi, icyumweru n'ukwezi nyuma yo guhuza database na analytics.</div>
+</section>
+
+<footer>© TikTak Real Estate · Admin prototype · Demo data only</footer>
 </main>
 <div id="toast" class="toast"></div>
 <script src="api.js"></script>
 <script src="admin.js"></script>
-</body></html>
+</body>
+</html>

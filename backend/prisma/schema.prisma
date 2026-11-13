@@ -21,6 +21,11 @@ enum ListingType {
   CAR
 }
 
+enum ListingTransaction {
+  RENT
+  SALE
+}
+
 enum ListingStatus {
   PENDING
   APPROVED
@@ -49,43 +54,47 @@ enum CommissionStatus {
 }
 
 model User {
-  id           String   @id @default(cuid())
+  id           String    @id @default(cuid())
   fullName     String
   country      String
-  contact      String   @unique
+  contact      String    @unique
   passwordHash String
-  role         UserRole @default(BUYER)
-  isActive     Boolean  @default(true)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  role         UserRole  @default(BUYER)
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
   listings     Listing[] @relation("SellerListings")
-  buyerDeals   Deal[] @relation("BuyerDeals")
-  sellerDeals  Deal[] @relation("SellerDeals")
+  buyerDeals   Deal[]    @relation("BuyerDeals")
+  sellerDeals  Deal[]    @relation("SellerDeals")
   messages     Message[]
 }
 
 model Listing {
-  id          String        @id @default(cuid())
-  code        String        @unique
-  type        ListingType
-  title       String
-  country     String
-  province    String
-  district    String
-  locality    String
-  price       Decimal       @db.Decimal(18,2)
-  currency    Currency
-  description String
-  details     Json?
-  status      ListingStatus @default(PENDING)
-  sellerId    String
-  seller      User          @relation("SellerListings", fields: [sellerId], references: [id])
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  deals       Deal[]
-  images      ListingImage[]
+  id              String             @id @default(cuid())
+  code            String             @unique
+  type            ListingType
+  transactionType ListingTransaction @default(SALE)
+  title           String
+  country         String
+  province        String
+  district        String
+  locality        String
+  price           Decimal            @db.Decimal(18, 2)
+  currency        Currency
+  description     String
+  details         Json?
+  status          ListingStatus      @default(PENDING)
+  sellerId        String
+  seller          User               @relation("SellerListings", fields: [sellerId], references: [id])
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  deals           Deal[]
+  images          ListingImage[]
 
   @@index([status, country, type])
+  @@index([transactionType, status])
 }
 
 model ListingImage {
@@ -112,13 +121,14 @@ model Deal {
   buyer            User       @relation("BuyerDeals", fields: [buyerId], references: [id])
   sellerId         String
   seller           User       @relation("SellerDeals", fields: [sellerId], references: [id])
-  price            Decimal    @db.Decimal(18,2)
+  price            Decimal    @db.Decimal(18, 2)
   currency         Currency
   status           DealStatus @default(INTERESTED)
-  commissionRate   Decimal    @default(0.05) @db.Decimal(5,4)
-  commissionAmount Decimal    @db.Decimal(18,2)
+  commissionRate   Decimal    @default(0.05) @db.Decimal(5, 4)
+  commissionAmount Decimal    @db.Decimal(18, 2)
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @updatedAt
+
   commission       Commission?
 
   @@index([status])
@@ -128,7 +138,7 @@ model Commission {
   id        String           @id @default(cuid())
   dealId    String           @unique
   deal      Deal             @relation(fields: [dealId], references: [id])
-  amount    Decimal          @db.Decimal(18,2)
+  amount    Decimal          @db.Decimal(18, 2)
   currency  Currency
   status    CommissionStatus @default(PENDING)
   paidAt    DateTime?

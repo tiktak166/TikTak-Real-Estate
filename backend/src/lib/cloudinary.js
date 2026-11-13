@@ -13,16 +13,3 @@ export function uploadImage(buffer, folder) {
     stream.end(buffer);
   });
 }
-
-
-export function uploadVideo(buffer, folder) {
-  const client = requireCloudinary();
-  return new Promise((resolve, reject) => {
-    const stream = client.uploader.upload_stream({
-      folder,
-      resource_type: 'video',
-      allowed_formats: ['mp4', 'webm', 'mov', 'm4v']
-    }, (error, result) => error ? reject(error) : resolve(result));
-    stream.end(buffer);
-  });
-}
