@@ -3,8 +3,14 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { prisma } from '../lib/prisma.js';
 import { authenticate, allowRoles } from '../middleware/auth.js';
-import { listingImageUpload } from '../middleware/imageUpload.js';
-import { uploadImage } from '../lib/cloudinary.js';
+import {
+  listingImageUpload,
+  listingVideoUpload
+} from '../middleware/imageUpload.js';
+import {
+  uploadImage,
+  uploadVideo
+} from '../lib/cloudinary.js';
 
 const router = Router();
 
@@ -71,6 +77,15 @@ router.get('/', async (req, res, next) => {
             format: true,
             width: true,
             height: true
+          }
+        },
+        videos: {
+          orderBy: { createdAt: 'asc' },
+          select: {
+            id: true,
+            url: true,
+            format: true,
+            duration: true
           }
         }
       },
@@ -188,12 +203,84 @@ router.post(
   }
 );
 
+router.post(
+  '/:id/video',
+  authenticate,
+  allowRoles('SELLER', 'AGENT', 'ADMIN'),
+  (req, res, next) => {
+    listingVideoUpload(req, res, async err => {
+      if (err) return next(err);
+
+      try {
+        if (!req.file) {
+          return res.status(400).json({
+            error: 'Hitamo video ushaka kohereza.'
+          });
+        }
+
+        const listing = await prisma.listing.findUnique({
+          where: { id: req.params.id },
+          select: { id: true, sellerId: true }
+        });
+
+        if (!listing) {
+          return res.status(404).json({
+            error: 'Itangazo ntiriboneka.'
+          });
+        }
+
+        if (req.user.role !== 'ADMIN' && listing.sellerId !== req.user.id) {
+          return res.status(403).json({
+            error: 'Ntufite uburenganzira kuri iri tangazo.'
+          });
+        }
+
+        const existingVideo = await prisma.listingVideo.findFirst({
+          where: { listingId: listing.id }
+        });
+
+        if (existingVideo) {
+          return res.status(400).json({
+            error: 'Iri tangazo risanzwe rifite video imwe.'
+          });
+        }
+
+        const uploaded = await uploadVideo(
+          req.file.buffer,
+          `tiktak-real-estate/listings/${listing.id}/videos`
+        );
+
+        const video = await prisma.listingVideo.create({
+          data: {
+            listingId: listing.id,
+            url: uploaded.secure_url,
+            publicId: uploaded.public_id,
+            format: uploaded.format,
+            bytes: uploaded.bytes,
+            duration: uploaded.duration
+          }
+        });
+
+        res.status(201).json({
+          message: 'Video yoherejwe neza.',
+          video
+        });
+      } catch (e) {
+        next(e);
+      }
+    });
+  }
+);
+
 router.get('/mine', authenticate, async (req, res, next) => {
   try {
     const listings = await prisma.listing.findMany({
       where: { sellerId: req.user.id },
       include: {
         images: {
+          orderBy: { createdAt: 'asc' }
+        },
+        videos: {
           orderBy: { createdAt: 'asc' }
         }
       },

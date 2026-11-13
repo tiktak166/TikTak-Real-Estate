@@ -92,6 +92,7 @@ model Listing {
 
   deals           Deal[]
   images          ListingImage[]
+  videos          ListingVideo[]
 
   @@index([status, country, type])
   @@index([transactionType, status])
@@ -107,6 +108,20 @@ model ListingImage {
   bytes     Int?
   width     Int?
   height    Int?
+  createdAt DateTime @default(now())
+
+  @@index([listingId, createdAt])
+}
+
+model ListingVideo {
+  id        String   @id @default(cuid())
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  url       String
+  publicId  String   @unique
+  format    String?
+  bytes     Int?
+  duration  Float?
   createdAt DateTime @default(now())
 
   @@index([listingId, createdAt])
