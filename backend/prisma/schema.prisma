@@ -1,3 +1,4 @@
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -7,12 +8,45 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum UserRole { ADMIN AGENT BUYER SELLER }
-enum ListingType { LAND HOUSE CAR }
-enum ListingStatus { PENDING APPROVED REJECTED PAUSED SOLD }
-enum DealStatus { INTERESTED NEGOTIATION SALE_AGREEMENT SALE_COMPLETED DISPUTED }
-enum Currency { RWF KES }
-enum CommissionStatus { PENDING PAID WAIVED }
+enum UserRole {
+  ADMIN
+  AGENT
+  BUYER
+  SELLER
+}
+
+enum ListingType {
+  LAND
+  HOUSE
+  CAR
+}
+
+enum ListingStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  PAUSED
+  SOLD
+}
+
+enum DealStatus {
+  INTERESTED
+  NEGOTIATION
+  SALE_AGREEMENT
+  SALE_COMPLETED
+  DISPUTED
+}
+
+enum Currency {
+  RWF
+  KES
+}
+
+enum CommissionStatus {
+  PENDING
+  PAID
+  WAIVED
+}
 
 model User {
   id           String   @id @default(cuid())
@@ -37,7 +71,7 @@ model Listing {
   title       String
   country     String
   province    String
-  district   String
+  district    String
   locality    String
   price       Decimal       @db.Decimal(18,2)
   currency    Currency
@@ -50,6 +84,7 @@ model Listing {
   updatedAt   DateTime      @updatedAt
   deals       Deal[]
   images      ListingImage[]
+
   @@index([status, country, type])
 }
 
@@ -64,26 +99,28 @@ model ListingImage {
   width     Int?
   height    Int?
   createdAt DateTime @default(now())
+
   @@index([listingId, createdAt])
 }
 
 model Deal {
-  id          String     @id @default(cuid())
-  code        String     @unique
-  listingId   String
-  listing     Listing    @relation(fields: [listingId], references: [id])
-  buyerId     String
-  buyer       User       @relation("BuyerDeals", fields: [buyerId], references: [id])
-  sellerId    String
-  seller      User       @relation("SellerDeals", fields: [sellerId], references: [id])
-  price       Decimal    @db.Decimal(18,2)
-  currency    Currency
-  status      DealStatus @default(INTERESTED)
-  commissionRate Decimal @default(0.05) @db.Decimal(5,4)
-  commissionAmount Decimal @db.Decimal(18,2)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  commission  Commission?
+  id               String     @id @default(cuid())
+  code             String     @unique
+  listingId        String
+  listing          Listing    @relation(fields: [listingId], references: [id])
+  buyerId          String
+  buyer            User       @relation("BuyerDeals", fields: [buyerId], references: [id])
+  sellerId         String
+  seller           User       @relation("SellerDeals", fields: [sellerId], references: [id])
+  price            Decimal    @db.Decimal(18,2)
+  currency         Currency
+  status           DealStatus @default(INTERESTED)
+  commissionRate   Decimal    @default(0.05) @db.Decimal(5,4)
+  commissionAmount Decimal    @db.Decimal(18,2)
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  commission       Commission?
+
   @@index([status])
 }
 
@@ -108,5 +145,6 @@ model Message {
   body      String
   isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
+
   @@index([userId, createdAt])
 }
