@@ -32,33 +32,61 @@
 
 <section id="overview" class="page active">
   <div class="welcome">
-    <div><p class="eyebrow">OWNER DASHBOARD</p><h2>Murakaza neza muri TikTak 👋</h2><p>Hano ni ho ucungira amatangazo, abakiriya n'ubucuruzi bwose.</p></div>
-    <button class="primary" onclick="showPage('listings')">+ Reba amatangazo</button>
+    <div>
+      <p class="eyebrow">OWNER DASHBOARD</p>
+      <h2>Murakaza neza muri TikTak</h2>
+      <p>Incamake y'amakuru nyayo abitswe muri database.</p>
+    </div>
+    <button class="primary" onclick="showPage('listings')">Reba amatangazo</button>
   </div>
+
   <div class="stats">
-    <article class="stat"><span>Amatangazo yose</span><strong>128</strong><small class="good">↑ 8 muri iki cyumweru</small><b class="stat-icon">⌂</b></article>
-    <article class="stat"><span>Ibyifuzo bishya</span><strong>24</strong><small class="warn">Bisaba gukurikiranwa</small><b class="stat-icon">✉</b></article>
-    <article class="stat"><span>Ubucuruzi burimo gukorwa</span><strong>09</strong><small>Negotiation / Pending</small><b class="stat-icon">⇄</b></article>
-    <article class="stat"><span>Komisiyo itegerejwe</span><strong>1.8M <em>RWF</em></strong><small>5% ku bicuruzwa byemejwe</small><b class="stat-icon">₣</b></article>
-  </div>
-  <div class="content-grid">
-    <article class="panel">
-      <div class="panel-head"><div><h3>Ibikorwa biheruka</h3><p>Recent activity</p></div><button class="subtle" onclick="showPage('requests')">Reba byose →</button></div>
-      <div class="activity"><span class="activity-icon yellow">✉</span><div><b>Icyifuzo gishya cyo kugura</b><p>Ikibanza · Kigali, Gasabo</p></div><time>10 min</time></div>
-      <div class="activity"><span class="activity-icon gray">⌂</span><div><b>Itangazo rishya rikeneye kwemezwa</b><p>Inzu · Kigali, Kicukiro</p></div><time>42 min</time></div>
-      <div class="activity"><span class="activity-icon green">✓</span><div><b>Komisiyo yemejwe</b><p>Deal TTR-D004 · 250,000 RWF</p></div><time>2 h</time></div>
-      <div class="activity"><span class="activity-icon gray">♙</span><div><b>Umugurisha mushya yiyandikishije</b><p>Huye, Rwanda</p></div><time>3 h</time></div>
+    <article class="stat">
+      <span>Amatangazo yose</span>
+      <strong id="overviewListings">...</strong>
+      <small>Amatangazo ari muri database</small>
     </article>
-    <article class="panel">
-      <div class="panel-head"><div><h3>Ibihugu</h3><p>Listings by market</p></div></div>
-      <div class="market"><div><span>🇷🇼 Rwanda</span><b>96</b></div><div class="bar"><i style="width:75%"></i></div></div>
-      <div class="market"><div><span>🇰🇪 Kenya</span><b>32</b></div><div class="bar"><i style="width:25%"></i></div></div>
-      <div class="note">Amafaranga agaragazwa mu ifaranga ry'igihugu cy'itangazo (RWF / KES).</div>
+    <article class="stat">
+      <span>Ategereje kwemezwa</span>
+      <strong id="overviewPending">...</strong>
+      <small>Amatangazo ya PENDING</small>
+    </article>
+    <article class="stat">
+      <span>Ubucuruzi bwarangiye</span>
+      <strong id="overviewCompleted">...</strong>
+      <small>Deals za SALE COMPLETED</small>
+    </article>
+    <article class="stat">
+      <span>Komisiyo itegerejwe</span>
+      <strong id="overviewCommission">...</strong>
+      <small id="overviewCommissionNote">RWF / KES</small>
     </article>
   </div>
+
   <article class="panel table-panel">
-    <div class="panel-head"><div><h3>Amatangazo aheruka</h3><p>Recent listings awaiting review</p></div><button class="subtle" onclick="showPage('listings')">Genzura amatangazo →</button></div>
-    <div class="table-wrap"><table><thead><tr><th>ID</th><th>IGICURUZWA</th><th>AHO GIHEREREYE</th><th>IGICIRO</th><th>IMITERERE</th><th>IGIKORWA</th></tr></thead><tbody><tr><td>TTR-00128</td><td>Ikibanza · 500 m²</td><td>Gasabo, Kigali</td><td>25,000,000 RWF</td><td><span class="pill pending">Isuzumwa</span></td><td><button class="mini" onclick="toast('Demo: itangazo ryemejwe')">Emeza</button></td></tr><tr><td>TTR-00127</td><td>Inzu · 4 bedrooms</td><td>Kicukiro, Kigali</td><td>85,000,000 RWF</td><td><span class="pill live">Riri ku rubuga</span></td><td><button class="mini" onclick="toast('Demo: wafunguye itangazo')">Reba</button></td></tr><tr><td>TTR-00126</td><td>Imodoka · Toyota</td><td>Nairobi, Kenya</td><td>2,400,000 KES</td><td><span class="pill live">Riri ku rubuga</span></td><td><button class="mini" onclick="toast('Demo: wafunguye itangazo')">Reba</button></td></tr></tbody></table></div>
+    <div class="panel-head">
+      <div>
+        <h3>Amatangazo aheruka</h3>
+        <p>Amakuru ava muri database</p>
+      </div>
+      <button class="subtle" onclick="showPage('listings')">Genzura amatangazo</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>IGICURUZWA</th>
+            <th>AHO GIHEREREYE</th>
+            <th>IGICIRO</th>
+            <th>IMITERERE</th>
+          </tr>
+        </thead>
+        <tbody id="overviewListingRows">
+          <tr><td colspan="5">Tegereza amakuru...</td></tr>
+        </tbody>
+      </table>
+    </div>
   </article>
 </section>
 
@@ -165,17 +193,48 @@
 
 <section id="deals" class="page">
   <div class="section-intro"><h2>Amasezerano y'ubucuruzi</h2><p>Kurikirana intambwe z'igurisha kuva ku biganiro kugeza ryemejwe ko rirangiye.</p></div>
-  <div class="filter-row"><input id="dealSearch" placeholder="Shakisha Deal ID cyangwa igicuruzwa..."><select id="dealFilter"><option value="all">Ibyiciro byose</option><option>Interested</option><option>Negotiation</option><option>Sale Agreement</option><option>Sale Completed</option><option>Disputed</option></select></div>
+  <div class="filter-row"><input id="dealSearch" placeholder="Shakisha Deal ID cyangwa igicuruzwa..."><select id="dealFilter"><option value="all">Ibyiciro byose</option><option value="INTERESTED">Interested</option><option value="NEGOTIATION">Negotiation</option><option value="SALE_AGREEMENT">Sale Agreement</option><option value="SALE_COMPLETED">Sale Completed</option><option value="DISPUTED">Disputed</option></select></div>
   <div class="panel"><div class="table-wrap"><table><thead><tr><th>DEAL ID</th><th>IGICURUZWA</th><th>IGICIRO</th><th>5% KOMISIYO</th><th>INTAMBWE</th><th>IGIKORWA</th></tr></thead><tbody id="dealRows"></tbody></table></div></div>
   <div class="panel calculator"><h3>Ibariro rya komisiyo ya 5%</h3><p>Komisiyo ibarwa ku giciro cyose cy'igurisha kandi yishyurwa n'umugurisha.</p><div class="calc-row"><label>Igiciro cya nyuma<input id="salePrice" type="number" min="0" placeholder="Urugero: 1000000"></label><label>Igihugu / Ifaranga<select id="saleCurrency"><option value="RWF">Rwanda · RWF</option><option value="KES">Kenya · KES</option></select></label><div class="calc-result"><small>Komisiyo ya TikTak (5%)</small><strong id="commissionResult">0 RWF</strong></div></div></div>
   <p class="demo-hint">Amasezerano agaragara hano ni amakuru y'igerageza. Kwemeza igurisha bigomba gushingira ku bimenyetso n'amasezerano y'impande bireba.</p>
 </section>
 
 <section id="commissions" class="page">
-  <div class="section-intro"><h2>Komisiyo ya TikTak</h2><p>Komisiyo ni 5% by'igiciro cyose cy'igurisha, yishyurwa n'umugurisha.</p></div>
-  <div class="stats"><article class="stat"><span>Yinjiye · RWF</span><strong>750,000</strong></article><article class="stat"><span>Yinjiye · KES</span><strong>150,000</strong></article><article class="stat"><span>Itegerejwe · RWF</span><strong>1,800,000</strong></article></div>
-  <div class="panel note">Iyi mibare ni urugero rwa demo. Kwakira Mobile Money cyangwa bank transfer no kwemeza ubwishyu bizakorwa nyuma yo guhuza payment provider no kugenzura konti zakira amafaranga.</div>
-  <div class="panel"><h3>Intambwe zo kwishyura</h3><ol><li>Admin yemeza ko igurisha ryarangiye.</li><li>Sisitemu ibara 5% by'igiciro cya nyuma.</li><li>Umugurisha ahabwa amabwiriza yo kwishyura.</li><li>Admin agenzura Mobile Money cyangwa bank transfer, akandika ko komisiyo yishyuwe.</li></ol><p class="demo-hint">Ntukandike ko ubwishyu bwemejwe utarabugenzura. Nta payment provider ihujwe muri iyi demo.</p></div>
+  <div class="section-intro">
+    <h2>Komisiyo ya TikTak</h2>
+    <p>Komisiyo ni 5% by'igiciro cyose cy'igurisha, yishyurwa n'umugurisha.</p>
+  </div>
+
+  <div class="stats">
+    <article class="stat"><span>Itegerejwe · RWF</span><strong id="pendingRwf">0</strong></article>
+    <article class="stat"><span>Itegerejwe · KES</span><strong id="pendingKes">0</strong></article>
+    <article class="stat"><span>Yishyuwe yose hamwe</span><strong id="paidTotal">0</strong></article>
+  </div>
+
+  <div class="panel note">
+    Ubwishyu bwemezwa na Admin gusa nyuma yo kugenzura ko amafaranga yakiriwe. Nta payment provider ihujwe kugeza ubu.
+  </div>
+
+  <div class="panel">
+    <h3>Urutonde rwa Komisiyo</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>DEAL</th>
+            <th>IGICURUZWA</th>
+            <th>UGURISHA</th>
+            <th>KOMISIYO</th>
+            <th>STATUS</th>
+            <th>PAYMENT REFERENCE / IGIKORWA</th>
+          </tr>
+        </thead>
+        <tbody id="commissionRows">
+          <tr><td colspan="6">Tegereza amakuru...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </section>
 
 <section id="messages" class="page">

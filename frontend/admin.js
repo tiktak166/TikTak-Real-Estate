@@ -22,6 +22,7 @@ function showPage(id) {
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
 
+  if (id === 'overview') renderDashboard();
   if (id === 'listings') renderListings();
   if (id === 'clients') renderClients();
   if (id === 'requests') renderRequests();
@@ -56,7 +57,7 @@ function escapeAdmin(v) {
 const initialListings = [
   {
     id: 'TTR-00128',
-    title: 'Ikibanza · 500 m²',
+    title: 'Ikibanza Â· 500 mÂ²',
     price: '25,000,000 RWF',
     place: 'Gasabo, Kigali',
     country: 'Rwanda',
@@ -64,7 +65,7 @@ const initialListings = [
   },
   {
     id: 'TTR-00127',
-    title: 'Inzu · ibyumba 4',
+    title: 'Inzu Â· ibyumba 4',
     price: '85,000,000 RWF',
     place: 'Kicukiro, Kigali',
     country: 'Rwanda',
@@ -72,7 +73,7 @@ const initialListings = [
   },
   {
     id: 'TTR-00126',
-    title: 'Toyota Corolla · 2020',
+    title: 'Toyota Corolla Â· 2020',
     price: '2,400,000 KES',
     place: 'Nairobi',
     country: 'Kenya',
@@ -80,7 +81,7 @@ const initialListings = [
   },
   {
     id: 'TTR-00125',
-    title: 'Ikibanza · 300 m²',
+    title: 'Ikibanza Â· 300 mÂ²',
     price: '18,000,000 RWF',
     place: 'Huye',
     country: 'Rwanda',
@@ -88,7 +89,7 @@ const initialListings = [
   },
   {
     id: 'TTR-00124',
-    title: 'Inzu · 3 bedrooms',
+    title: 'Inzu Â· 3 bedrooms',
     price: '6,500,000 KES',
     place: 'Kiambu',
     country: 'Kenya',
@@ -116,6 +117,57 @@ async function getListings() {
   }
 }
 
+async function renderDashboard() {
+  const listingBody = document.getElementById('overviewListingRows');
+  const money = n => Number(n || 0).toLocaleString(undefined, { maximumFractionDigits: 2 });
+
+  try {
+    const [overview, listingData] = await Promise.all([
+      TikTakAPI.request('/admin/overview'),
+      TikTakAPI.request('/admin/listings')
+    ]);
+
+    adminListings = listingData.listings || [];
+
+    document.getElementById('overviewListings').textContent = money(overview.listings);
+    document.getElementById('overviewPending').textContent = money(overview.pendingListings);
+    document.getElementById('overviewCompleted').textContent = money(overview.completedDeals);
+
+    const pending = { RWF: 0, KES: 0 };
+    (overview.commissions || []).forEach(item => {
+      if (item.status === 'PENDING' && Object.prototype.hasOwnProperty.call(pending, item.currency)) {
+        pending[item.currency] += Number(item._sum?.amount || 0);
+      }
+    });
+
+    document.getElementById('overviewCommission').textContent =
+      `RWF ${money(pending.RWF)} · KES ${money(pending.KES)}`;
+
+    document.getElementById('overviewCommissionNote').textContent =
+      'Komisiyo zitarishyurwa';
+
+    if (listingBody) {
+      const recent = adminListings.slice(0, 5);
+      listingBody.innerHTML = recent.map(item => `
+        <tr>
+          <td>${escapeAdmin(item.code || '-')}</td>
+          <td>${escapeAdmin(item.title || '-')}</td>
+          <td>${escapeAdmin([item.locality, item.district, item.country].filter(Boolean).join(', ') || '-')}</td>
+          <td>${money(item.price)} ${escapeAdmin(item.currency || '')}</td>
+          <td><span class="pill ${item.status === 'APPROVED' ? 'live' : 'pending'}">${escapeAdmin(listingLabel(item.status))}</span></td>
+        </tr>
+      `).join('') || '<tr><td colspan="5">Nta matangazo araboneka muri database.</td></tr>';
+    }
+  } catch (error) {
+    ['overviewListings', 'overviewPending', 'overviewCompleted', 'overviewCommission'].forEach(id => {
+      const element = document.getElementById(id);
+      if (element) element.textContent = 'Ntaboneka';
+    });
+    if (listingBody) {
+      listingBody.innerHTML = `<tr><td colspan="5">Ntibyashobotse kubona amakuru: ${escapeAdmin(error.message)}</td></tr>`;
+    }
+  }
+}
 function listingLabel(status) {
   return ({
     PENDING: 'Isuzumwa',
@@ -148,7 +200,7 @@ async function renderListings() {
       <td>
         ${escapeAdmin(x.title)}
         ${x.type === 'HOUSE'
-          ? `<small>${x.transactionType === 'RENT' ? ' · Ubukode' : ' · Kugurisha'}</small>`
+          ? `<small>${x.transactionType === 'RENT' ? ' Â· Ubukode' : ' Â· Kugurisha'}</small>`
           : ''}
       </td>
       <td>${Number(x.price).toLocaleString()} ${escapeAdmin(x.currency)}</td>
@@ -190,7 +242,7 @@ async function listingAction(id, status) {
       body: JSON.stringify({ status })
     });
 
-    toast('Imiterere y’itangazo yahinduwe.');
+    toast('Imiterere yâ€™itangazo yahinduwe.');
     await renderListings();
   } catch (e) {
     toast(e.message);
@@ -238,7 +290,7 @@ createListingForm?.addEventListener('submit', async e => {
   const files = Array.from(imagesInput?.files || []);
 
   if (files.length < 1) {
-    toast('Shyiraho nibura ifoto imwe y’itangazo.');
+    toast('Shyiraho nibura ifoto imwe yâ€™itangazo.');
     return;
   }
 
@@ -250,7 +302,7 @@ createListingForm?.addEventListener('submit', async e => {
   const type = newListingType?.value;
 
   if (!type) {
-    toast('Hitamo ubwoko bw’itangazo.');
+    toast('Hitamo ubwoko bwâ€™itangazo.');
     return;
   }
 
@@ -337,10 +389,10 @@ createListingForm?.addEventListener('submit', async e => {
     updateTransactionTypeVisibility();
 
     if (createListingStatus) {
-      createListingStatus.textContent = 'Itangazo n’amafoto byabitswe neza.';
+      createListingStatus.textContent = 'Itangazo nâ€™amafoto byabitswe neza.';
     }
 
-    toast('Itangazo n’amafoto byabitswe neza.');
+    toast('Itangazo nâ€™amafoto byabitswe neza.');
 
     await renderListings();
 
@@ -397,7 +449,7 @@ const initialRequests = [
     buyer: 'Demo Customer',
     country: 'Kenya',
     phone: '+254 *** ***',
-    message: 'Ashaka kumenya amateka y’imodoka.',
+    message: 'Ashaka kumenya amateka yâ€™imodoka.',
     status: 'Negotiation'
   }
 ];
@@ -425,8 +477,8 @@ function renderRequests() {
   body.innerHTML = a.map(x => `
     <div class="lead">
       <div class="lead-main">
-        <b>${escapeAdmin(x.id)} · ${escapeAdmin(x.title)}</b>
-        <p>${escapeAdmin(x.buyer)} · ${escapeAdmin(x.country)} · ${escapeAdmin(x.phone)}</p>
+        <b>${escapeAdmin(x.id)} Â· ${escapeAdmin(x.title)}</b>
+        <p>${escapeAdmin(x.buyer)} Â· ${escapeAdmin(x.country)} Â· ${escapeAdmin(x.phone)}</p>
         <small>${escapeAdmin(x.message)}</small>
         <p>
           <label>
@@ -451,7 +503,7 @@ function requestStatus(id, status) {
   );
 
   renderRequests();
-  toast('Imiterere y’icyifuzo yahinduwe.');
+  toast('Imiterere yâ€™icyifuzo yahinduwe.');
 }
 
 ['requestSearch', 'requestFilter'].forEach(id => {
@@ -465,8 +517,8 @@ function requestStatus(id, status) {
 const initialThreads = [
   {
     id: 'th1',
-    name: 'Demo Buyer · REQ-00024',
-    meta: 'Ikibanza i Gasabo · Rwanda',
+    name: 'Demo Buyer Â· REQ-00024',
+    meta: 'Ikibanza i Gasabo Â· Rwanda',
     messages: [
       {
         from: 'client',
@@ -475,15 +527,15 @@ const initialThreads = [
       },
       {
         from: 'admin',
-        text: 'Muraho neza. Murakoze kutwandikira. Turimo kugenzura amakuru y’itangazo.',
+        text: 'Muraho neza. Murakoze kutwandikira. Turimo kugenzura amakuru yâ€™itangazo.',
         time: '09:20'
       }
     ]
   },
   {
     id: 'th2',
-    name: 'Demo Client · REQ-00023',
-    meta: 'Inzu i Kicukiro · Rwanda',
+    name: 'Demo Client Â· REQ-00023',
+    meta: 'Inzu i Kicukiro Â· Rwanda',
     messages: [
       {
         from: 'client',
@@ -494,12 +546,12 @@ const initialThreads = [
   },
   {
     id: 'th3',
-    name: 'Demo Customer · REQ-00022',
-    meta: 'Toyota i Nairobi · Kenya',
+    name: 'Demo Customer Â· REQ-00022',
+    meta: 'Toyota i Nairobi Â· Kenya',
     messages: [
       {
         from: 'client',
-        text: 'Ndifuza kumenya mileage y’imodoka.',
+        text: 'Ndifuza kumenya mileage yâ€™imodoka.',
         time: 'Ku wa mbere'
       }
     ]
@@ -560,7 +612,7 @@ function renderChat() {
   chatMessages.innerHTML = t.messages.map(m => `
     <div class="bubble ${m.from === 'admin' ? 'admin' : ''}">
       ${escapeAdmin(m.text)}
-      <small>${m.from === 'admin' ? 'TikTak Admin' : 'Umukiriya'} · ${escapeAdmin(m.time)}</small>
+      <small>${m.from === 'admin' ? 'TikTak Admin' : 'Umukiriya'} Â· ${escapeAdmin(m.time)}</small>
     </div>
   `).join('');
 
@@ -609,93 +661,80 @@ document.getElementById('replyForm')?.addEventListener('submit', e => {
 // DEALS AND COMMISSIONS
 // =====================================================
 
-const demoDeals = [
-  {
-    id: 'TTR-D004',
-    item: 'Inzu i Kigali',
-    price: 5000000,
-    currency: 'RWF',
-    status: 'Negotiation'
-  },
-  {
-    id: 'TTR-D003',
-    item: 'Ikibanza i Nairobi',
-    price: 3000000,
-    currency: 'KES',
-    status: 'Sale Completed'
-  },
-  {
-    id: 'TTR-D002',
-    item: 'Toyota Corolla i Kigali',
-    price: 12000000,
-    currency: 'RWF',
-    status: 'Sale Agreement'
-  },
-  {
-    id: 'TTR-D001',
-    item: 'Ikibanza i Huye',
-    price: 8000000,
-    currency: 'RWF',
-    status: 'Interested'
-  }
-];
+let adminDeals = [];
 
-function deals() {
-  try {
-    return JSON.parse(localStorage.getItem('tt6_deals')) || demoDeals;
-  } catch {
-    return demoDeals;
-  }
-}
+const dealStatusLabels = {
+  INTERESTED: 'Interested',
+  NEGOTIATION: 'Negotiation',
+  SALE_AGREEMENT: 'Sale Agreement',
+  SALE_COMPLETED: 'Sale Completed',
+  DISPUTED: 'Disputed'
+};
 
-function renderDeals() {
-  const q = (document.getElementById('dealSearch')?.value || '').toLowerCase();
-  const f = document.getElementById('dealFilter')?.value || 'all';
-
-  const a = deals().filter(d =>
-    (f === 'all' || d.status === f) &&
-    (`${d.id} ${d.item}`.toLowerCase().includes(q))
-  );
-
+async function renderDeals() {
   const body = document.getElementById('dealRows');
   if (!body) return;
 
-  body.innerHTML = a.map(d => `
-    <tr>
-      <td>${escapeAdmin(d.id)}</td>
-      <td>${escapeAdmin(d.item)}</td>
-      <td>${d.price.toLocaleString()} ${escapeAdmin(d.currency)}</td>
-      <td>${(d.price * 0.05).toLocaleString()} ${escapeAdmin(d.currency)}</td>
-      <td>
-        <span class="pill ${d.status === 'Sale Completed' ? 'live' : 'pending'}">
-          ${escapeAdmin(d.status)}
-        </span>
-      </td>
-      <td>
-        <select onchange="changeDeal('${d.id}',this.value)">
-          ${['Interested', 'Negotiation', 'Sale Agreement', 'Sale Completed', 'Disputed']
-            .map(v => `<option ${v === d.status ? 'selected' : ''}>${v}</option>`)
-            .join('')}
-        </select>
-      </td>
-    </tr>
-  `).join('') || '<tr><td colspan="6">Nta masezerano ahuye n’ishakisha.</td></tr>';
+  body.innerHTML = '<tr><td colspan="6">Birimo gushakisha amasezerano...</td></tr>';
+
+  try {
+    const data = await TikTakAPI.request('/deals');
+    adminDeals = data.deals || [];
+
+    const q = (document.getElementById('dealSearch')?.value || '').toLowerCase();
+    const f = document.getElementById('dealFilter')?.value || 'all';
+
+    const filtered = adminDeals.filter(d => {
+      const label = dealStatusLabels[d.status] || d.status;
+      return (f === 'all' || d.status === f || label === f) &&
+        (`${d.code} ${d.listing?.title || ''} ${d.seller?.fullName || ''} ${d.buyer?.fullName || ''}`.toLowerCase().includes(q));
+    });
+
+    body.innerHTML = filtered.map(d => {
+      const price = Number(d.price || 0);
+      const commission = Number(d.commissionAmount || 0);
+      const status = dealStatusLabels[d.status] || d.status;
+
+      return `
+        <tr>
+          <td>${escapeAdmin(d.code || '')}</td>
+          <td>${escapeAdmin(d.listing?.title || 'Nta zina')}</td>
+          <td>${price.toLocaleString()} ${escapeAdmin(d.currency || '')}</td>
+          <td>${commission.toLocaleString()} ${escapeAdmin(d.currency || '')}</td>
+          <td><span class="pill ${d.status === 'SALE_COMPLETED' ? 'live' : 'pending'}">${escapeAdmin(status)}</span></td>
+          <td>
+            <select onchange="changeDeal('${d.id}',this.value)">
+              ${Object.entries(dealStatusLabels).map(([value, label]) =>
+                `<option value="${value}" ${value === d.status ? 'selected' : ''}>${label}</option>`
+              ).join('')}
+            </select>
+          </td>
+        </tr>
+      `;
+    }).join('') || '<tr><td colspan="6">Nta masezerano ari muri database ahuye n’ishakisha.</td></tr>';
+  } catch (error) {
+    body.innerHTML = `<tr><td colspan="6">Ntibyashobotse kubona amasezerano: ${escapeAdmin(error.message)}</td></tr>`;
+  }
 }
 
-function changeDeal(id, status) {
-  localStorage.setItem(
-    'tt6_deals',
-    JSON.stringify(deals().map(d => d.id === id ? { ...d, status } : d))
-  );
+async function changeDeal(id, status) {
+  try {
+    await TikTakAPI.request(`/deals/${encodeURIComponent(id)}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status })
+    });
 
-  renderDeals();
-  toast('Intambwe y’amasezerano yahinduwe (demo).');
+    toast('Intambwe y’amasezerano yabitswe muri database.');
+    await renderDeals();
+  } catch (error) {
+    toast(error.message || 'Ntibyashobotse guhindura amasezerano.');
+    await renderDeals();
+  }
 }
 
 ['dealSearch', 'dealFilter'].forEach(id => {
   document.getElementById(id)?.addEventListener('input', renderDeals);
 });
-
 function calcCommission() {
   const price = Math.max(0, Number(document.getElementById('salePrice')?.value || 0));
   const cur = document.getElementById('saleCurrency')?.value || 'RWF';
@@ -716,8 +755,100 @@ const priorShowPage = showPage;
 showPage = function(id) {
   priorShowPage(id);
   if (id === 'deals') renderDeals();
+  if (id === 'commissions') renderCommissions();
 };
 
+// =====================================================
+// LIVE COMMISSION MANAGEMENT
+// =====================================================
+
+let adminCommissions = [];
+
+async function renderCommissions() {
+  const body = document.getElementById('commissionRows');
+  if (!body) return;
+
+  body.innerHTML = '<tr><td colspan="6">Tegereza amakuru...</td></tr>';
+
+  try {
+    const data = await TikTakAPI.request('/admin/commissions');
+    adminCommissions = data.commissions || [];
+
+    const totals = {
+      pendingRWF: 0,
+      pendingKES: 0,
+      paidRWF: 0,
+      paidKES: 0
+    };
+
+    adminCommissions.forEach(c => {
+      const amount = Number(c.amount || 0);
+      if (c.status === 'PENDING' && c.currency === 'RWF') totals.pendingRWF += amount;
+      if (c.status === 'PENDING' && c.currency === 'KES') totals.pendingKES += amount;
+      if (c.status === 'PAID' && c.currency === 'RWF') totals.paidRWF += amount;
+      if (c.status === 'PAID' && c.currency === 'KES') totals.paidKES += amount;
+    });
+
+    const money = n => n.toLocaleString(undefined, { maximumFractionDigits: 2 });
+
+    document.getElementById('pendingRwf').textContent = money(totals.pendingRWF);
+    document.getElementById('pendingKes').textContent = money(totals.pendingKES);
+    document.getElementById('paidTotal').textContent =
+      `RWF ${money(totals.paidRWF)} · KES ${money(totals.paidKES)}`;
+
+    body.innerHTML = adminCommissions.map(c => {
+      const deal = c.deal || {};
+      const statusLabel = {
+        PENDING: 'Itegerejwe',
+        PAID: 'Yishyuwe',
+        WAIVED: 'Yakuweho'
+      }[c.status] || c.status;
+
+      return `
+        <tr>
+          <td>${escapeAdmin(deal.code || '-')}</td>
+          <td>${escapeAdmin(deal.listing?.title || '-')}</td>
+          <td>${escapeAdmin(deal.seller?.fullName || '-')}</td>
+          <td>${money(Number(c.amount || 0))} ${escapeAdmin(c.currency)}</td>
+          <td><span class="pill ${c.status === 'PAID' ? 'live' : 'pending'}">${escapeAdmin(statusLabel)}</span></td>
+          <td>
+            ${c.status === 'PENDING' ? `
+              <input id="commission-ref-${c.id}" placeholder="Payment reference">
+              <button class="mini success" onclick="markCommissionPaid('${c.id}')">Emeza ubwishyu</button>
+            ` : escapeAdmin(c.reference || '-')}
+          </td>
+        </tr>
+      `;
+    }).join('') || '<tr><td colspan="6">Nta komisiyo iraboneka muri database.</td></tr>';
+
+  } catch (error) {
+    body.innerHTML = `<tr><td colspan="6">${escapeAdmin(error.message)}</td></tr>`;
+  }
+}
+
+async function markCommissionPaid(id) {
+  const input = document.getElementById(`commission-ref-${id}`);
+  const reference = input?.value.trim();
+
+  if (!reference) {
+    toast('Banza wandike payment reference.');
+    return;
+  }
+
+  if (!confirm('Wagenzuye ko amafaranga yakiriwe koko?')) return;
+
+  try {
+    await TikTakAPI.request(`/admin/commissions/${id}/paid`, {
+      method: 'PATCH',
+      body: JSON.stringify({ reference })
+    });
+
+    toast('Ubwishyu bwemejwe neza.');
+    await renderCommissions();
+  } catch (error) {
+    toast(error.message);
+  }
+}
 // =====================================================
 // LIVE CLIENT MANAGEMENT
 // =====================================================
@@ -796,3 +927,7 @@ async function toggleClient(id, isActive) {
 ['clientSearch', 'clientRole'].forEach(id => {
   document.getElementById(id)?.addEventListener('input', renderClients);
 });
+
+
+// Load live dashboard data when Admin page opens
+renderDashboard();
