@@ -14,6 +14,9 @@ import adminRoutes from './routes/admin.js';
 
 const app = express();
 
+// Render proxy configuration
+app.set('trust proxy', 1);
+
 app.use(helmet());
 app.use(cors({
   origin: process.env.CLIENT_ORIGIN?.split(',') || true
