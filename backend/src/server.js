@@ -1,4 +1,3 @@
-
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
@@ -14,13 +13,18 @@ import adminRoutes from './routes/admin.js';
 
 const app = express();
 
-// Render proxy configuration
 app.set('trust proxy', 1);
-
 app.use(helmet());
+
+const allowedOrigins = (process.env.CLIENT_ORIGIN || '')
+  .split(',')
+  .map(origin => origin.trim())
+  .filter(Boolean);
+
 app.use(cors({
-  origin: process.env.CLIENT_ORIGIN?.split(',') || true
+  origin: allowedOrigins.length ? allowedOrigins : true
 }));
+
 app.use(express.json({ limit: '1mb' }));
 
 app.use('/api', rateLimit({
@@ -69,13 +73,10 @@ app.use((err, req, res, next) => {
   }
 
   if (err.code === 'P2025') {
-    return res.status(404).json({
-      error: 'Record not found'
-    });
+    return res.status(404).json({ error: 'Record not found' });
   }
 
   console.error(err);
-
   res.status(err.status || 500).json({
     error: process.env.NODE_ENV === 'production'
       ? 'Internal server error'
@@ -84,7 +85,6 @@ app.use((err, req, res, next) => {
 });
 
 const port = Number(process.env.PORT || 4000);
-
 const server = app.listen(port, () => {
   console.log(`TikTak API running on http://localhost:${port}`);
 });
