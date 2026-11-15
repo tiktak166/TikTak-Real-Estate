@@ -37,3 +37,53 @@
 .calc-result small{display:block;color:#735400;font-size:11px}
 .calc-result strong{display:block;font-size:22px;margin-top:4px;color:#171717}
 @media(max-width:760px){.calc-row{grid-template-columns:1fr}}
+
+/* Admin session name and logout button */
+#sessionName {
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+  background: #fff8e6;
+  border: 1px solid #f0dfb5;
+  border-radius: 20px;
+  padding: 7px 12px;
+  white-space: nowrap;
+}
+
+#logout {
+  background: #171717;
+  color: #fff;
+  padding: 9px 14px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  border: 0;
+  cursor: pointer;
+}
+
+#logout:hover {
+  background: #9b2929;
+}
+
+#adminAvatar {
+  flex-shrink: 0;
+}
+
+@media(max-width:700px) {
+  .top-actions {
+    gap: 7px;
+  }
+
+  #sessionName {
+    font-size: 10px;
+    padding: 6px 8px;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  #logout {
+    padding: 8px 10px;
+    font-size: 10px;
+  }
+}
