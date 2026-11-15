@@ -278,6 +278,201 @@
       </p>
     </div>
 
+
+    <!-- ADMIN LISTING CREATION FORM -->
+
+    <article class="panel admin-listing-form">
+
+      <div class="panel-head">
+        <div>
+          <h3>Ongeramo itangazo rishya</h3>
+          <p>
+            Shyiramo amakuru y'inzu, ubutaka cyangwa imodoka.
+          </p>
+        </div>
+      </div>
+
+      <form id="adminListingForm">
+
+        <div class="admin-form-grid">
+
+          <label>
+            Ubwoko bw'itangazo
+            <select id="adminListingType" name="type" required>
+              <option value="">Hitamo ubwoko</option>
+              <option value="HOUSE">Inzu (House)</option>
+              <option value="LAND">Ubutaka (Land)</option>
+              <option value="CAR">Imodoka (Car)</option>
+            </select>
+          </label>
+
+
+          <label>
+            Umutwe w'itangazo
+            <input
+              type="text"
+              name="title"
+              required
+              placeholder="Urugero: Inzu nziza i Kigali"
+            >
+          </label>
+
+
+          <label>
+            Igihugu
+            <select
+              id="adminListingCountry"
+              name="country"
+              required
+            >
+              <option value="">Hitamo igihugu</option>
+              <option value="Rwanda">Rwanda</option>
+              <option value="Kenya">Kenya</option>
+            </select>
+          </label>
+
+
+          <label>
+            Intara / County
+            <input
+              type="text"
+              name="province"
+              required
+              placeholder="Urugero: Kigali"
+            >
+          </label>
+
+
+          <label>
+            Akarere / District
+            <input
+              type="text"
+              name="district"
+              required
+              placeholder="Andika akarere"
+            >
+          </label>
+
+
+          <label>
+            Umurenge / Ahantu
+            <input
+              type="text"
+              name="locality"
+              required
+              placeholder="Andika umurenge cyangwa ahantu"
+            >
+          </label>
+
+
+          <label>
+            Igiciro
+            <input
+              type="number"
+              name="price"
+              min="0"
+              step="any"
+              required
+              placeholder="Andika igiciro"
+            >
+          </label>
+
+
+          <label>
+            Ifaranga
+            <select
+              id="adminListingCurrency"
+              name="currency"
+              required
+            >
+              <option value="">Hitamo ifaranga</option>
+              <option value="RWF">RWF</option>
+              <option value="KES">KES</option>
+            </select>
+          </label>
+
+        </div>
+
+
+        <!-- HOUSE RENT OR SALE -->
+
+        <div
+          id="adminHouseFields"
+          class="admin-extra-fields"
+          hidden
+        >
+
+          <label>
+            Inzu irakodeshwa cyangwa iragurishwa?
+
+            <select
+              id="adminTransactionType"
+              name="transactionType"
+            >
+              <option value="">Hitamo</option>
+              <option value="RENT">For Rent - Gukodesha</option>
+              <option value="SALE">For Sale - Kugurisha</option>
+            </select>
+          </label>
+
+        </div>
+
+
+        <label class="admin-full-field">
+          Ibisobanuro birambuye
+
+          <textarea
+            name="description"
+            minlength="20"
+            maxlength="5000"
+            required
+            placeholder="Sobanura neza itangazo ryawe..."
+          ></textarea>
+        </label>
+
+
+        <div class="admin-form-grid">
+
+          <label>
+            Amafoto y'itangazo
+
+            <input
+              id="adminListingImages"
+              type="file"
+              accept="image/*"
+              multiple
+            >
+          </label>
+
+
+          <label>
+            Video y'itangazo (ntibitegetswe)
+
+            <input
+              id="adminListingVideo"
+              type="file"
+              accept="video/*"
+            >
+          </label>
+
+        </div>
+
+
+        <button
+          id="adminListingSubmit"
+          type="submit"
+          class="primary"
+        >
+          Ongeraho itangazo
+        </button>
+
+      </form>
+
+    </article>
+
+    <!-- END ADMIN LISTING CREATION FORM -->
+
+
     <div class="filter-row">
 
       <input
@@ -301,6 +496,7 @@
       </select>
 
     </div>
+
 
     <div class="panel">
 

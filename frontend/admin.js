@@ -921,3 +921,124 @@ async function markCommissionPaid(id) {
 document.addEventListener('DOMContentLoaded', () => {
   renderDashboard();
 });
+/* =========================================================
+   ADMIN CREATE LISTING FORM
+========================================================= */
+
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('adminListingForm');
+  if (!form) return;
+
+  const typeInput = document.getElementById('adminListingType');
+  const countryInput = document.getElementById('adminListingCountry');
+  const currencyInput = document.getElementById('adminListingCurrency');
+  const houseFields = document.getElementById('adminHouseFields');
+  const transactionInput = document.getElementById('adminTransactionType');
+  const imagesInput = document.getElementById('adminListingImages');
+  const videoInput = document.getElementById('adminListingVideo');
+  const submitButton = document.getElementById('adminListingSubmit');
+
+  const showMessage = (message) => {
+    if (typeof toast === 'function') toast(message);
+    else alert(message);
+  };
+
+  typeInput.addEventListener('change', () => {
+    const isHouse = typeInput.value === 'HOUSE';
+    houseFields.hidden = !isHouse;
+    transactionInput.required = isHouse;
+
+    if (!isHouse) transactionInput.value = '';
+  });
+
+  countryInput.addEventListener('change', () => {
+    if (countryInput.value === 'Rwanda') currencyInput.value = 'RWF';
+    else if (countryInput.value === 'Kenya') currencyInput.value = 'KES';
+    else currencyInput.value = '';
+  });
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    if (!form.reportValidity()) return;
+
+    if (typeInput.value === 'HOUSE' && !transactionInput.value) {
+      showMessage('Hitamo niba inzu ikodeshwa cyangwa igurishwa.');
+      transactionInput.focus();
+      return;
+    }
+
+    const selectedVideo = videoInput.files[0];
+
+    if (selectedVideo && selectedVideo.size > 50 * 1024 * 1024) {
+      showMessage('Video ntigomba kurenza 50MB.');
+      return;
+    }
+
+    submitButton.disabled = true;
+    submitButton.textContent = 'Birimo kubikwa...';
+
+    let listingCreated = false;
+
+    try {
+      const payload = Object.fromEntries(new FormData(form).entries());
+
+      if (payload.type !== 'HOUSE') {
+        payload.transactionType = 'SALE';
+      }
+
+      payload.price = Number(payload.price);
+
+      const created = await TikTakAPI.request('/listings', {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      });
+
+      const listingId = created.listing.id;
+      listingCreated = true;
+
+      const selectedImages = [...imagesInput.files];
+
+      if (selectedImages.length > 0) {
+        const imageData = new FormData();
+        selectedImages.forEach(file => imageData.append('images', file));
+
+        await TikTakAPI.request(`/listings/${listingId}/images`, {
+          method: 'POST',
+          body: imageData
+        });
+      }
+
+      if (selectedVideo) {
+        const videoData = new FormData();
+        videoData.append('video', selectedVideo);
+
+        await TikTakAPI.request(`/listings/${listingId}/video`, {
+          method: 'POST',
+          body: videoData
+        });
+      }
+
+      form.reset();
+      houseFields.hidden = true;
+      transactionInput.required = false;
+      currencyInput.value = '';
+
+      showMessage('Itangazo ryabitswe neza kandi ritegereje kwemezwa.');
+
+      if (typeof renderListings === 'function') {
+        await renderListings();
+      }
+
+    } catch (error) {
+      if (listingCreated) {
+        showMessage('Itangazo ryarabitswe, ariko kohereza amafoto cyangwa video byagize ikibazo. Banza urebe muri Listings.');
+      } else {
+        showMessage(error.message || 'Habaye ikibazo mu kubika itangazo.');
+      }
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = 'Bika itangazo';
+    }
+  });
+});

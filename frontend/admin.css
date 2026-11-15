@@ -87,3 +87,104 @@
     font-size: 10px;
   }
 }
+
+/* =========================================================
+   TIKTAK ADMIN LISTING CREATION FORM
+========================================================= */
+
+.admin-listing-form {
+  margin-bottom: 24px;
+}
+
+.admin-listing-form .panel-head {
+  margin-bottom: 22px;
+}
+
+.admin-listing-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.admin-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.admin-listing-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+}
+
+.admin-listing-form input,
+.admin-listing-form select,
+.admin-listing-form textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 12px 13px;
+  border: 1px solid #d9dee7;
+  border-radius: 8px;
+  background: #fff;
+  color: #222;
+  font: inherit;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.admin-listing-form input:focus,
+.admin-listing-form select:focus,
+.admin-listing-form textarea:focus {
+  outline: none;
+  border-color: #c99b24;
+  box-shadow: 0 0 0 3px rgba(201, 155, 36, 0.12);
+}
+
+.admin-listing-form textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.admin-full-field {
+  width: 100%;
+}
+
+.admin-extra-fields {
+  padding: 16px;
+  border: 1px solid #ead9a7;
+  border-radius: 9px;
+  background: #fffaf0;
+}
+
+.admin-extra-fields[hidden] {
+  display: none !important;
+}
+
+.admin-listing-form input[type="file"] {
+  padding: 10px;
+  background: #fafafa;
+}
+
+.admin-listing-form .demo-hint {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.admin-listing-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 700px) {
+  .admin-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-listing-form {
+    padding: 16px;
+  }
+}
