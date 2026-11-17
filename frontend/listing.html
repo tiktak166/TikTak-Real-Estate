@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111111">
+  <title>TikTak Real Estate | Listing Details</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="detail-page">
+  <header class="detail-header">
+    <a href="index.html" class="detail-brand">TIKTAK <span>REAL ESTATE</span></a>
+    <a href="index.html" class="detail-back">Back to listings</a>
+  </header>
+
+  <main class="detail-container">
+    <div id="listingLoading" class="detail-message">Loading listing...</div>
+    <div id="listingError" class="detail-message" hidden></div>
+
+    <article id="listingContent" hidden>
+      <div class="detail-heading">
+        <div>
+          <p id="detailType" class="detail-type"></p>
+          <h1 id="detailTitle"></h1>
+          <p id="detailLocation" class="detail-location"></p>
+        </div>
+        <div id="detailPrice" class="detail-price"></div>
+      </div>
+
+      <section class="detail-gallery">
+        <div class="detail-main-image">
+          <button type="button" id="galleryPrev" class="detail-gallery-arrow" aria-label="Previous photo">&#10094;</button>
+          <img id="mainListingImage" src="" alt="Listing photo">
+          <button type="button" id="galleryNext" class="detail-gallery-arrow" aria-label="Next photo">&#10095;</button>
+          <span id="galleryCounter" class="detail-gallery-counter"></span>
+        </div>
+        <div id="detailThumbnails" class="detail-thumbnails"></div>
+      </section>
+
+      <section class="detail-information">
+        <h2>Listing information</h2>
+        <div id="detailSpecs" class="detail-specs"></div>
+
+        <div class="detail-description">
+          <h2>Description</h2>
+          <p id="detailDescription"></p>
+        </div>
+
+        <div id="detailExtra" class="detail-extra" hidden>
+          <h2>More details</h2>
+          <div id="detailExtraContent"></div>
+        </div>
+
+        <div id="detailVideoSection" class="detail-video-section" hidden>
+          <h2>Listing video</h2>
+          <video id="detailVideo" controls playsinline></video>
+        </div>
+      </section>
+
+      <section class="detail-share">
+        <h2>Share this listing</h2>
+        <p>Share the link to this listing only.</p>
+        <div class="detail-share-buttons">
+          <button type="button" id="shareListingButton">Share listing</button>
+          <button type="button" id="copyListingButton">Copy listing link</button>
+        </div>
+        <p id="shareFeedback" class="detail-feedback" aria-live="polite"></p>
+      </section>
+
+      <section class="detail-contact">
+        <h2>Contact TikTak</h2>
+        <p>Contact us about this listing.</p>
+        <div class="detail-contact-buttons">
+          <a id="detailWhatsApp" href="#" target="_blank" rel="noopener">WhatsApp</a>
+          <a href="tel:+250782517883">Call: +250 782 517 883</a>
+          <a href="mailto:ndarishizeaima@gmail.com">Email TikTak</a>
+          <a id="detailMessage" href="account.html#login">TikTak Messages</a>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="detail-footer">
+    <p>&copy; TikTak Real Estate</p>
+  </footer>
+
+  <script src="api.js"></script>
+  <script src="listing.js"></script>
+</body>
+</html>

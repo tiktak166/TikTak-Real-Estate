@@ -10,6 +10,15 @@ const toast = msg => {
   setTimeout(() => t.classList.remove('show'), 2200);
 };
 
+const esc = s =>
+  String(s ?? '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[c]));
+
 $('#themeToggle')?.addEventListener('click', () => {
   document.body.classList.toggle('dark');
   localStorage.setItem(
@@ -31,62 +40,111 @@ $('#languageSelect')?.addEventListener('change', e => {
   });
 });
 
-const esc = s =>
-  String(s ?? '').replace(/[&<>"']/g, c => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#39;'
-  }[c]));
+function listingUrl(id) {
+  return `listing.html?id=${encodeURIComponent(id)}`;
+}
 
 function renderListings(rows) {
   const grid = $('#listingGrid');
   if (!grid) return;
 
   grid.innerHTML = rows.map(x => {
-    const type = String(x.type).toLowerCase();
+    const type = String(x.type || '').toLowerCase();
     const loc = [x.locality, x.district, x.province]
       .filter(Boolean)
       .join(', ');
+
     const price = Number(x.price).toLocaleString();
-    const label = type === 'land' ? 'LAND' : type === 'house' ? 'HOMES' : 'AUTO';
+    const label = type === 'land'
+      ? 'LAND'
+      : type === 'house'
+        ? 'HOMES'
+        : 'AUTO';
+
+    const images = Array.isArray(x.images)
+      ? x.images.filter(img => img && img.url)
+      : [];
+
+    const firstImage = images[0]?.url || '';
+    const transaction = String(x.transactionType || 'SALE').toUpperCase();
+    const transactionLabel = transaction === 'RENT'
+      ? 'FOR RENT'
+      : 'FOR SALE';
+
+    const imageMarkup = firstImage
+      ? `<img class="listing-slide-image"
+          src="${esc(firstImage)}"
+          alt="${esc(x.title)}"
+          loading="lazy">`
+      : '';
 
     return `
       <article class="listing-card"
-        data-type="${type}"
+        data-type="${esc(type)}"
         data-country="${esc(x.country)}"
-        data-location="${esc(loc)}">
+        data-location="${esc(loc)}"
+        data-slide-index="0"
+        data-slide-count="${images.length}">
 
-        <div class="listing-image image-${type}"
-          style="${x.images?.[0]?.url
-            ? `background-image:linear-gradient(180deg,transparent,#0008),url('${esc(x.images[0].url)}');background-size:cover;background-position:center`
-            : ''}">
+        <div class="listing-image image-${esc(type)}">
 
-          <span class="status">FOR SALE</span>
-          <span class="image-caption">${label} · ${esc(x.country).toUpperCase()}</span>
+          <a class="listing-image-link"
+            href="${listingUrl(x.id)}"
+            aria-label="Reba amakuru yose ya ${esc(x.title)}">
+
+            ${imageMarkup}
+
+            <span class="status">${transactionLabel}</span>
+            <span class="image-caption">
+              ${label} · ${esc(x.country).toUpperCase()}
+            </span>
+          </a>
+
+          ${images.length > 1 ? `
+            <button class="listing-slide-control slide-prev"
+              type="button"
+              data-slide-prev
+              aria-label="Ifoto ibanza">‹</button>
+
+            <button class="listing-slide-control slide-next"
+              type="button"
+              data-slide-next
+              aria-label="Ifoto ikurikira">›</button>
+
+            <span class="listing-slide-counter">
+              1 / ${images.length}
+            </span>
+          ` : ''}
         </div>
 
         <div class="listing-body">
+
           <div class="listing-meta">
             ${esc(loc).toUpperCase()}, ${esc(x.country).toUpperCase()}
             <span>ID: ${esc(x.code)}</span>
           </div>
 
-          <h3>${esc(x.title)}</h3>
-          <div class="listing-detail">${esc(x.description)}</div>
+          <h3>
+            <a class="listing-title-link"
+              href="${listingUrl(x.id)}">
+              ${esc(x.title)}
+            </a>
+          </h3>
+
+          <div class="listing-detail">
+            ${esc(x.description)}
+          </div>
 
           <div class="listing-footer">
             <b>${esc(x.currency)} ${price}</b>
             <span>↗</span>
           </div>
 
-          <button class="primary offer-button"
-            type="button"
-            data-contact-tiktak="${esc(x.id)}"
-            data-listing-title="${esc(x.title)}">
-            Twandikire kuri iri tangazo
-          </button>
+          <a class="btn btn-yellow listing-details-button"
+            href="${listingUrl(x.id)}">
+            Reba amakuru yose
+          </a>
+
         </div>
       </article>
     `;
@@ -97,6 +155,31 @@ function renderListings(rows) {
   }
 
   filterListings();
+}
+
+function changeListingSlide(card, direction) {
+  const count = Number(card.dataset.slideCount || 0);
+  if (count < 2) return;
+
+  const images = card._listingImages;
+  if (!images || !images.length) return;
+
+  let index = Number(card.dataset.slideIndex || 0);
+  index = (index + direction + count) % count;
+
+  card.dataset.slideIndex = String(index);
+
+  const image = card.querySelector('.listing-slide-image');
+  const counter = card.querySelector('.listing-slide-counter');
+
+  if (image) {
+    image.src = images[index].url;
+    image.alt = `${card.dataset.listingTitle || 'TikTak listing'} - ${index + 1}`;
+  }
+
+  if (counter) {
+    counter.textContent = `${index + 1} / ${count}`;
+  }
 }
 
 function filterListings() {
@@ -126,11 +209,17 @@ $('#searchBtn')?.addEventListener('click', () => {
   $('#listings').scrollIntoView({ behavior: 'smooth' });
 });
 
+$('#typeFilter')?.addEventListener('change', filterListings);
+$('#countryFilter')?.addEventListener('change', filterListings);
+$('#locationFilter')?.addEventListener('input', filterListings);
+
 $$('.category-card').forEach(card => {
   card.addEventListener('click', () => {
-    $('#typeFilter').value = card.dataset.category;
+    const filter = $('#typeFilter');
+    if (filter) filter.value = card.dataset.category;
+
     filterListings();
-    $('#listings').scrollIntoView({ behavior: 'smooth' });
+    $('#listings')?.scrollIntoView({ behavior: 'smooth' });
   });
 });
 
@@ -138,10 +227,21 @@ $$('.category-card').forEach(card => {
 (async () => {
   try {
     const data = await TikTakAPI.request('/listings');
+    const rows = data.listings || [];
 
-    renderListings(data.listings || []);
+    renderListings(rows);
 
-    $('#listingStatus').textContent = 'Amatangazo yemejwe na TikTak';
+    // Save each listing's photos for its homepage slider.
+    $$('.listing-card').forEach((card, index) => {
+      card._listingImages = Array.isArray(rows[index]?.images)
+        ? rows[index].images.filter(img => img && img.url)
+        : [];
+
+      card.dataset.listingTitle = rows[index]?.title || '';
+    });
+
+    $('#listingStatus').textContent =
+      'Amatangazo yemejwe na TikTak';
 
   } catch (err) {
     const grid = $('#listingGrid');
@@ -150,28 +250,66 @@ $$('.category-card').forEach(card => {
     const emptyState = $('#emptyState');
     if (emptyState) {
       emptyState.hidden = false;
-      emptyState.textContent = 'Nta matangazo yemejwe araboneka ubu.';
+      emptyState.textContent =
+        'Nta matangazo yemejwe araboneka ubu.';
     }
 
     const status = $('#listingStatus');
     if (status) {
-      status.textContent = 'Nta matangazo yemejwe araboneka';
+      status.textContent =
+        'Nta matangazo yemejwe araboneka';
     }
 
-    console.warn('TikTak listings could not be loaded:', err.message);
+    console.warn(
+      'TikTak listings could not be loaded:',
+      err.message
+    );
   }
 })();
+
+// HOMEPAGE PHOTO SLIDER
+$('#listingGrid')?.addEventListener('click', event => {
+  const previous = event.target.closest('[data-slide-prev]');
+  const next = event.target.closest('[data-slide-next]');
+
+  if (previous) {
+    event.preventDefault();
+    event.stopPropagation();
+    changeListingSlide(previous.closest('.listing-card'), -1);
+  }
+
+  if (next) {
+    event.preventDefault();
+    event.stopPropagation();
+    changeListingSlide(next.closest('.listing-card'), 1);
+  }
+});
+
+// Automatically change photos every 3 seconds.
+// Pause when the visitor hovers over or focuses a listing.
+const reducedMotion = window.matchMedia(
+  '(prefers-reduced-motion: reduce)'
+).matches;
+
+if (!reducedMotion) {
+  setInterval(() => {
+    if (document.hidden) return;
+
+    $$('.listing-card').forEach(card => {
+      if (card.hidden) return;
+      if (card.matches(':hover, :focus-within')) return;
+
+      changeListingSlide(card, 1);
+    });
+  }, 3000);
+}
 
 $('#menuToggle')?.addEventListener('click', () => {
   toast('Menu yihariye ya telefone iri gutegurwa.');
 });
 
-// TIKTAK DIRECT CONTACT
-$('#listingGrid')?.addEventListener('click', event => {
-  const button = event.target.closest('[data-contact-tiktak]');
-  if (!button) return;
-
-  const title = button.dataset.listingTitle || 'Iri tangazo';
+// TIKTAK CONTACT MODAL
+function openContactModal(title) {
   const modal = $('#contactModal');
   const listingName = $('#contactListingName');
   const whatsapp = $('#contactWhatsApp');
@@ -194,7 +332,7 @@ $('#listingGrid')?.addEventListener('click', event => {
     document.body.classList.add('contact-modal-open');
     modal.querySelector('.contact-close')?.focus();
   }
-});
+}
 
 function closeContactModal() {
   const modal = $('#contactModal');
@@ -219,7 +357,8 @@ document.addEventListener('keydown', event => {
 
 $('#contactMessageButton')?.addEventListener('click', () => {
   const title =
-    $('#contactListingName')?.textContent?.replace(/^Ku bijyanye na: /, '') || '';
+    $('#contactListingName')?.textContent
+      ?.replace(/^Ku bijyanye na: /, '') || '';
 
   sessionStorage.setItem('tiktak-contact-listing', title);
 
@@ -232,4 +371,4 @@ $('#contactMessageButton')?.addEventListener('click', () => {
     : 'account.html#login';
 });
 
-// END TIKTAK DIRECT CONTACT
+// END TIKTAK CONTACT
