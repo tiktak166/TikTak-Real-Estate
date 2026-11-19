@@ -188,3 +188,81 @@
     padding: 16px;
   }
 }
+/* ADMIN EDIT LISTING MODAL */
+.tiktak-edit-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(0, 0, 0, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.tiktak-edit-modal {
+  width: 100%;
+  max-width: 720px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #fff;
+  color: #222;
+  padding: 25px;
+  border-radius: 14px;
+}
+
+.tiktak-edit-modal h2 {
+  margin: 0 0 8px;
+}
+
+.tiktak-edit-modal form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.tiktak-edit-modal label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-weight: 600;
+}
+
+.tiktak-edit-modal input,
+.tiktak-edit-modal select,
+.tiktak-edit-modal textarea {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  font: inherit;
+}
+
+.tiktak-edit-modal textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+
+.tiktak-edit-full,
+.tiktak-edit-actions {
+  grid-column: 1 / -1;
+}
+
+.tiktak-edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+@media (max-width: 600px) {
+  .tiktak-edit-modal form {
+    grid-template-columns: 1fr;
+  }
+
+  .tiktak-edit-full,
+  .tiktak-edit-actions {
+    grid-column: auto;
+  }
+}

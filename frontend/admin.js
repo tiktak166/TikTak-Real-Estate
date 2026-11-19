@@ -1,4 +1,3 @@
-
 /* =========================================================
    TIKTAK REAL ESTATE - ADMIN DASHBOARD
    Real database integration
@@ -431,6 +430,16 @@ async function renderListings() {
               >Shyira Sold</button>
             ` : ''}
 
+            <button
+              class="mini"
+              onclick="editAdminListing('${escapeAdmin(item.id)}')"
+            >Hindura</button>
+
+            <button
+              class="mini danger"
+              onclick="deleteAdminListing('${escapeAdmin(item.id)}')"
+            >Siba</button>
+
           </div>
         </td>
       </tr>
@@ -659,7 +668,7 @@ const dealStatusLabels = {
 async function getDeals() {
   const data = await TikTakAPI.request('/deals');
 
-  adminDeals = data.deals || [];
+ adminDeals = data.deals || [];
 
   return adminDeals;
 }
@@ -1042,3 +1051,185 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+/* =========================================================
+   ADMIN LISTING EDIT AND DELETE
+========================================================= */
+
+async function editAdminListing(id) {
+  try {
+    const listing = adminListings.find(item => item.id === id);
+
+    if (!listing) {
+      await getListings();
+    }
+
+    const item = adminListings.find(entry => entry.id === id);
+
+    if (!item) {
+      toast('Itangazo ntiribashije kuboneka.');
+      return;
+    }
+
+    const value = (key) => item[key] ?? '';
+
+    const formHtml = `
+      <div class="tiktak-edit-overlay" id="tiktakEditOverlay">
+        <div class="tiktak-edit-modal">
+          <h2>Hindura itangazo</h2>
+          <p>${escapeAdmin(item.code || '')}</p>
+
+          <form id="tiktakEditForm">
+            <label>Ubwoko
+              <select name="type" required>
+                <option value="HOUSE" ${value('type') === 'HOUSE' ? 'selected' : ''}>HOUSE</option>
+                <option value="LAND" ${value('type') === 'LAND' ? 'selected' : ''}>LAND</option>
+                <option value="CAR" ${value('type') === 'CAR' ? 'selected' : ''}>CAR</option>
+              </select>
+            </label>
+
+            <label>Umutwe w'itangazo
+              <input name="title" required minlength="5" maxlength="140" value="${escapeAdmin(value('title'))}">
+            </label>
+
+            <label>Igihugu
+              <select name="country" required>
+                <option value="Rwanda" ${value('country') === 'Rwanda' ? 'selected' : ''}>Rwanda</option>
+                <option value="Kenya" ${value('country') === 'Kenya' ? 'selected' : ''}>Kenya</option>
+              </select>
+            </label>
+
+            <label>Intara / County
+              <input name="province" required value="${escapeAdmin(value('province'))}">
+            </label>
+
+            <label>Akarere / District
+              <input name="district" required value="${escapeAdmin(value('district'))}">
+            </label>
+
+            <label>Umurenge / Ahantu
+              <input name="locality" required value="${escapeAdmin(value('locality'))}">
+            </label>
+
+            <label>Igiciro
+              <input name="price" type="number" min="0.01" step="any" required value="${escapeAdmin(value('price'))}">
+            </label>
+
+            <label>Ifaranga
+              <select name="currency" required>
+                <option value="RWF" ${value('currency') === 'RWF' ? 'selected' : ''}>RWF</option>
+                <option value="KES" ${value('currency') === 'KES' ? 'selected' : ''}>KES</option>
+              </select>
+            </label>
+
+            <label class="tiktak-edit-full">Ubukode cyangwa kugurisha
+              <select name="transactionType" ${item.type === 'HOUSE' ? 'required' : 'disabled'}>
+                <option value="RENT" ${value('transactionType') === 'RENT' ? 'selected' : ''}>For Rent</option>
+                <option value="SALE" ${value('transactionType') === 'SALE' ? 'selected' : ''}>For Sale</option>
+              </select>
+            </label>
+
+            <label class="tiktak-edit-full">Ibisobanuro
+              <textarea name="description" required minlength="20" maxlength="5000">${escapeAdmin(value('description'))}</textarea>
+            </label>
+
+            <div class="tiktak-edit-actions">
+              <button type="button" class="mini" id="tiktakEditCancel">Funga</button>
+              <button type="submit" class="primary" id="tiktakEditSave">Bika impinduka</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('tiktakEditOverlay')?.remove();
+    document.body.insertAdjacentHTML('beforeend', formHtml);
+
+    const overlay = document.getElementById('tiktakEditOverlay');
+    const form = document.getElementById('tiktakEditForm');
+    const typeSelect = form.elements.type;
+    const transactionSelect = form.elements.transactionType;
+
+    typeSelect.addEventListener('change', () => {
+      transactionSelect.disabled = typeSelect.value !== 'HOUSE';
+      transactionSelect.required = typeSelect.value === 'HOUSE';
+
+      if (typeSelect.value !== 'HOUSE') {
+        transactionSelect.value = 'SALE';
+      }
+    });
+
+    document.getElementById('tiktakEditCancel').onclick = () => overlay.remove();
+
+    overlay.addEventListener('click', event => {
+      if (event.target === overlay) overlay.remove();
+    });
+
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+
+      if (!form.reportValidity()) return;
+
+      const saveButton = document.getElementById('tiktakEditSave');
+      saveButton.disabled = true;
+      saveButton.textContent = 'Birimo kubikwa...';
+
+      try {
+        const payload = Object.fromEntries(new FormData(form).entries());
+
+        if (payload.type !== 'HOUSE') {
+          payload.transactionType = 'SALE';
+        }
+
+        payload.price = Number(payload.price);
+
+        await TikTakAPI.request(`/admin/listings/${encodeURIComponent(id)}`, {
+          method: 'PATCH',
+          body: JSON.stringify(payload)
+        });
+
+        overlay.remove();
+        toast('Itangazo ryahinduwe neza.');
+        await renderListings();
+        await renderDashboard();
+
+      } catch (error) {
+        saveButton.disabled = false;
+        saveButton.textContent = 'Bika impinduka';
+        apiError(error);
+      }
+    });
+
+  } catch (error) {
+    apiError(error);
+  }
+}
+
+
+async function deleteAdminListing(id) {
+  const item = adminListings.find(entry => entry.id === id);
+
+  if (!item) {
+    toast('Itangazo ntiribashije kuboneka.');
+    return;
+  }
+
+  const confirmed = confirm(
+    `Urifuza gusiba itangazo "${item.title}" (${item.code})?\n\nIki gikorwa ntigishobora gusubizwa inyuma.`
+  );
+
+  if (!confirmed) return;
+
+  try {
+    await TikTakAPI.request(`/admin/listings/${encodeURIComponent(id)}`, {
+      method: 'DELETE'
+    });
+
+    toast('Itangazo ryasibwe neza.');
+    await renderListings();
+    await renderDashboard();
+
+  } catch (error) {
+    apiError(error);
+  }
+}
