@@ -190,7 +190,8 @@
   }
 
   function listingLink() {
-    return window.location.href.split('#')[0];
+    const apiBase = window.TikTakAPI.base.replace(/\/api\/?$/, '');
+    return `${apiBase}/share/${encodeURIComponent(listing.id)}`;
   }
 
   async function copyListingLink() {

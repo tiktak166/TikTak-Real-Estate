@@ -46,6 +46,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/listings', listingRoutes);
 app.use('/api/deals', dealRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/share', shareRoutes);
 
 app.use((err, req, res, next) => {
   if (err instanceof ZodError) {
@@ -97,3 +98,4 @@ const shutdown = async () => {
 
 process.on('SIGINT', shutdown);
 process.on('SIGTERM', shutdown);
+import shareRoutes from './routes/share.js';
