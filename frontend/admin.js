@@ -100,6 +100,82 @@ function dateLabel(value) {
    PAGE NAVIGATION
 ========================================================= */
 
+
+// WEBSITE ANALYTICS - REAL DATABASE
+async function renderAnalytics() {
+  const status = document.getElementById('analyticsStatus');
+  const periodInput = document.getElementById('analyticsPeriod');
+  const visitorsElement = document.getElementById('reportVisitors');
+  const visitsElement = document.getElementById('reportVisits');
+  const listingViewsElement = document.getElementById('reportListingViews');
+  const topBody = document.getElementById('reportTopListings');
+  const chartBody = document.getElementById('reportAnalyticsRows');
+
+  const period = periodInput?.value || 'week';
+
+  if (status) status.textContent = "Tegereza amakuru y'isesengura...";
+
+  try {
+    const data = await TikTakAPI.request(
+      `/admin/analytics?period=${encodeURIComponent(period)}`
+    );
+
+    if (visitorsElement) {
+      visitorsElement.textContent =
+        Number(data.uniqueBrowsers || 0).toLocaleString();
+    }
+
+    if (visitsElement) {
+      visitsElement.textContent =
+        Number(data.visits || 0).toLocaleString();
+    }
+
+    if (listingViewsElement) {
+      listingViewsElement.textContent =
+        Number(data.listingViews || 0).toLocaleString();
+    }
+
+    if (topBody) {
+      topBody.innerHTML = (data.topListings || []).map((item, index) => `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${escapeAdmin(item.title)}</td>
+          <td>${Number(item.views || 0).toLocaleString()}</td>
+        </tr>
+      `).join('') || `
+        <tr><td colspan="3">Nta matangazo yarebwe muri iki gihe.</td></tr>
+      `;
+    }
+
+    if (chartBody) {
+      chartBody.innerHTML = (data.chart || []).map(item => `
+        <tr>
+          <td>${escapeAdmin(item.label)}</td>
+          <td>${Number(item.visits || 0).toLocaleString()}</td>
+          <td>${Number(item.visitors || 0).toLocaleString()}</td>
+        </tr>
+      `).join('') || `
+        <tr><td colspan="3">Nta mibare iraboneka muri iki gihe.</td></tr>
+      `;
+    }
+
+    if (status) {
+      status.textContent =
+        `Raporo ivuye muri database. Igihe: ${data.timezone || 'Africa/Kigali'}. Abasura ni browsers/devices byihariye, si umubare wâ€™abantu bemejwe.`;
+    }
+
+  } catch (error) {
+    if (status) {
+      status.textContent =
+        'Ntibishobotse kubona raporo. Reba server na database.';
+    }
+
+    showTableMessage('reportTopListings', error.message, 3);
+    showTableMessage('reportAnalyticsRows', error.message, 3);
+    apiError(error);
+  }
+}
+
 function showPage(id) {
   pages.forEach(page => {
     page.classList.toggle('active', page.id === id);
@@ -127,6 +203,7 @@ function showPage(id) {
   if (id === 'deals') renderDeals();
   if (id === 'commissions') renderCommissions();
   if (id === 'messages') renderThreads();
+  if (id === 'reports') renderAnalytics();
 }
 
 nav.forEach(item => {
@@ -929,6 +1006,12 @@ async function markCommissionPaid(id) {
 
 document.addEventListener('DOMContentLoaded', () => {
   renderDashboard();
+
+  document.getElementById('analyticsPeriod')
+    ?.addEventListener('change', renderAnalytics);
+
+  document.getElementById('refreshAnalytics')
+    ?.addEventListener('click', renderAnalytics);
 });
 /* =========================================================
    ADMIN CREATE LISTING FORM

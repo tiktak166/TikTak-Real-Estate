@@ -93,6 +93,7 @@ model Listing {
   deals           Deal[]
   images          ListingImage[]
   videos          ListingVideo[]
+  pageVisits      PageVisit[]
 
   @@index([status, country, type])
   @@index([transactionType, status])
@@ -172,4 +173,17 @@ model Message {
   createdAt DateTime @default(now())
 
   @@index([userId, createdAt])
+}
+
+model PageVisit {
+  id        String   @id @default(cuid())
+  visitorId String
+  path      String
+  listingId String?
+  listing   Listing? @relation(fields: [listingId], references: [id], onDelete: SetNull)
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([listingId, createdAt])
+  @@index([visitorId, createdAt])
 }

@@ -1,3 +1,4 @@
+
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
@@ -6,10 +7,13 @@ import rateLimit from 'express-rate-limit';
 import { ZodError } from 'zod';
 import multer from 'multer';
 import { prisma } from './lib/prisma.js';
+
 import authRoutes from './routes/auth.js';
 import listingRoutes from './routes/listings.js';
 import dealRoutes from './routes/deals.js';
 import adminRoutes from './routes/admin.js';
+import shareRoutes from './routes/share.js';
+import analyticsRoutes from './routes/analytics.js';
 
 const app = express();
 
@@ -46,6 +50,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/listings', listingRoutes);
 app.use('/api/deals', dealRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/analytics', analyticsRoutes);
 app.use('/share', shareRoutes);
 
 app.use((err, req, res, next) => {
@@ -78,6 +83,7 @@ app.use((err, req, res, next) => {
   }
 
   console.error(err);
+
   res.status(err.status || 500).json({
     error: process.env.NODE_ENV === 'production'
       ? 'Internal server error'
@@ -86,6 +92,7 @@ app.use((err, req, res, next) => {
 });
 
 const port = Number(process.env.PORT || 4000);
+
 const server = app.listen(port, () => {
   console.log(`TikTak API running on http://localhost:${port}`);
 });
@@ -98,4 +105,3 @@ const shutdown = async () => {
 
 process.on('SIGINT', shutdown);
 process.on('SIGTERM', shutdown);
-import shareRoutes from './routes/share.js';

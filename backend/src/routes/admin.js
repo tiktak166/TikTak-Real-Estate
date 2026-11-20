@@ -389,3 +389,91 @@ router.delete('/videos/:id', async (req, res, next) => {
 });
 
 export default router;
+// WEBSITE ANALYTICS REPORT
+router.get('/analytics', async (req, res, next) => {
+  try {
+    const period = ['day', 'week', 'month'].includes(req.query.period)
+      ? req.query.period
+      : 'week';
+
+    // Rwanda uses UTC+2.
+    const now = new Date();
+    const kigaliNow = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+
+    const year = kigaliNow.getUTCFullYear();
+    const month = kigaliNow.getUTCMonth();
+    const day = kigaliNow.getUTCDate();
+
+    let startDay = day;
+
+    if (period === 'week') {
+      const weekday = kigaliNow.getUTCDay();
+      startDay = day - ((weekday + 6) % 7);
+    }
+
+    const startLocal = period === 'month'
+      ? new Date(Date.UTC(year, month, 1))
+      : new Date(Date.UTC(year, month, startDay));
+
+    const start = new Date(startLocal.getTime() - 2 * 60 * 60 * 1000);
+
+    const totals = await prisma.pageVisit.aggregate({
+      where: { createdAt: { gte: start } },
+      _count: { _all: true }
+    });
+
+    const uniqueGroups = await prisma.pageVisit.groupBy({
+      by: ['visitorId'],
+      where: { createdAt: { gte: start } }
+    });
+
+    const listingViews = await prisma.pageVisit.count({
+      where: {
+        createdAt: { gte: start },
+        listingId: { not: null }
+      }
+    });
+
+    const chart = await prisma.$queryRaw`
+      SELECT
+        TO_CHAR(
+          date_trunc(
+            ${period === 'day' ? 'hour' : 'day'},
+            "createdAt" AT TIME ZONE 'Africa/Kigali'
+          ),
+          ${period === 'day' ? 'HH24:00' : 'YYYY-MM-DD'}
+        ) AS label,
+        COUNT(*)::int AS visits,
+        COUNT(DISTINCT "visitorId")::int AS visitors
+      FROM "PageVisit"
+      WHERE "createdAt" >= ${start}
+      GROUP BY 1
+      ORDER BY 1
+    `;
+
+    const topListings = await prisma.$queryRaw`
+      SELECT
+        l.id,
+        l.title,
+        COUNT(pv.id)::int AS views
+      FROM "PageVisit" pv
+      INNER JOIN "Listing" l ON l.id = pv."listingId"
+      WHERE pv."createdAt" >= ${start}
+      GROUP BY l.id, l.title
+      ORDER BY views DESC
+      LIMIT 10
+    `;
+
+    res.json({
+      period,
+      timezone: 'Africa/Kigali',
+      visits: totals._count._all,
+      uniqueBrowsers: uniqueGroups.length,
+      listingViews,
+      chart,
+      topListings
+    });
+  } catch (error) {
+    next(error);
+  }
+});
