@@ -6,13 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>TikTak Real Estate | Admin Dashboard</title>
   <link rel="stylesheet" href="admin.css">
-<link rel="icon" type="image/svg+xml" href="assets/tiktak-logo.svg">
+  <link rel="icon" type="image/svg+xml" href="assets/tiktak-logo.svg">
 </head>
-
 <body>
 
 <aside class="sidebar">
-
   <a class="brand" href="index.html">
     <span class="mark">T</span>
     <span>
@@ -23,114 +21,55 @@
 
   <div class="side-label">MAIN MENU</div>
 
-  <button class="nav active" data-page="overview">
-    ▦ <span>Incamake / Overview</span>
-  </button>
-
-  <button class="nav" data-page="listings">
-    ⌂ <span>Amatangazo / Listings</span>
-  </button>
-
-  <button class="nav" data-page="requests">
-    ✉ <span>Ibyifuzo / Requests</span>
-  </button>
-
-  <button class="nav" data-page="clients">
-    ♙ <span>Abakiriya / Clients</span>
-  </button>
-
-  <button class="nav" data-page="deals">
-    ⇄ <span>Amasezerano / Deals</span>
-  </button>
-
-  <button class="nav" data-page="commissions">
-    ₣ <span>Komisiyo / Commission</span>
-  </button>
+  <button class="nav active" data-page="overview">▦ <span>Incamake / Overview</span></button>
+  <button class="nav" data-page="listings">⌂ <span>Amatangazo / Listings</span></button>
+  <button class="nav" data-page="requests">✉ <span>Ibyifuzo / Requests</span></button>
+  <button class="nav" data-page="clients">♙ <span>Abakiriya / Clients</span></button>
+  <button class="nav" data-page="deals">⇄ <span>Amasezerano / Deals</span></button>
+  <button class="nav" data-page="commissions">₣ <span>Komisiyo / Commission</span></button>
 
   <div class="side-label tools-label">MANAGEMENT</div>
+  <button class="nav" data-page="messages">▤ <span>Ubutumwa / Messages</span></button>
+  <button class="nav" data-page="reports">⚑ <span>Raporo / Reports</span></button>
 
-  <button class="nav" data-page="messages">
-    ▤ <span>Ubutumwa / Messages</span>
-  </button>
-
-  <button class="nav" data-page="reports">
-    ⚑ <span>Raporo / Reports</span>
-  </button>
-
-  <a class="back-link" href="index.html">
-    ← Reba urubuga / View website
-  </a>
+  <a class="back-link" href="index.html">← Reba urubuga / View website</a>
 
   <div class="side-foot">
     TikTak Real Estate
     <br>
     <span>Owner access</span>
   </div>
-
 </aside>
-
 
 <main class="main">
 
   <header class="topbar">
-
     <div>
       <div class="crumb">TIKTAK / ADMIN</div>
       <h1 id="pageTitle">Incamake y'ubucuruzi</h1>
     </div>
 
     <div class="top-actions">
-
-      <span class="today" id="systemStatus">
-        ● Igenzura rya system...
-      </span>
-
-      <span
-        id="sessionName"
-        style="font-weight:600;font-size:13px;"
-      >
-        Admin
-      </span>
-
-      <button class="avatar" id="adminAvatar" type="button">
-        A
-      </button>
-
-      <button id="logout" type="button" class="primary">
-        Sohoka
-      </button>
-
+      <span class="today" id="systemStatus">● Igenzura rya system...</span>
+      <span id="sessionName" style="font-weight:600;font-size:13px;">Admin</span>
+      <button class="avatar" id="adminAvatar" type="button">A</button>
+      <button id="logout" type="button" class="primary">Sohoka</button>
     </div>
-
   </header>
 
-
   <!-- OVERVIEW -->
-
   <section id="overview" class="page active">
 
     <div class="welcome">
-
       <div>
         <p class="eyebrow">OWNER DASHBOARD</p>
-
         <h2>Murakaza neza muri TikTak 👋</h2>
-
-        <p>
-          Hano ni ho ucungira amatangazo, abakiriya
-          n'ubucuruzi bwa TikTak Real Estate.
-        </p>
+        <p>Hano ni ho ucungira amatangazo, abakiriya n'ubucuruzi bwa TikTak Real Estate.</p>
       </div>
-
-      <button class="primary" onclick="showPage('listings')">
-        + Reba amatangazo
-      </button>
-
+      <button class="primary" onclick="showPage('listings')">+ Reba amatangazo</button>
     </div>
 
-
     <div class="stats">
-
       <article class="stat">
         <span>Amatangazo yose</span>
         <strong id="overviewListings">-</strong>
@@ -158,40 +97,24 @@
         <small>Amakuru ava muri database</small>
         <b class="stat-icon">₣</b>
       </article>
-
     </div>
 
-
     <div class="content-grid">
-
       <article class="panel">
-
         <div class="panel-head">
           <div>
             <h3>Ibikorwa biheruka</h3>
             <p>Recent activity</p>
           </div>
-
-          <button
-            class="subtle"
-            onclick="showPage('listings')"
-          >
-            Reba amatangazo →
-          </button>
+          <button class="subtle" onclick="showPage('listings')">Reba amatangazo →</button>
         </div>
 
         <div id="overviewActivityRows">
-          <div class="empty-state">
-            Amakuru y'ibikorwa azagaragara hano
-            nyuma yo kuyahuza na database.
-          </div>
+          <div class="empty-state">Amakuru y'ibikorwa azagaragara hano nyuma yo kuyahuza na database.</div>
         </div>
-
       </article>
 
-
       <article class="panel">
-
         <div class="panel-head">
           <div>
             <h3>Ibihugu</h3>
@@ -199,43 +122,22 @@
           </div>
         </div>
 
-        <div class="empty-state">
-          Imibare y'amatangazo kuri buri gihugu
-          ntiraboneka muri API.
-        </div>
-
-        <div class="note">
-          Amafaranga agaragazwa mu ifaranga
-          ry'igihugu cy'itangazo (RWF / KES).
-        </div>
-
+        <div class="empty-state">Imibare y'amatangazo kuri buri gihugu ntiraboneka muri API.</div>
+        <div class="note">Amafaranga agaragazwa mu ifaranga ry'igihugu cy'itangazo (RWF / KES).</div>
       </article>
-
     </div>
 
-
     <article class="panel table-panel">
-
       <div class="panel-head">
-
         <div>
           <h3>Amatangazo aheruka</h3>
           <p>Recent listings</p>
         </div>
-
-        <button
-          class="subtle"
-          onclick="showPage('listings')"
-        >
-          Genzura amatangazo →
-        </button>
-
+        <button class="subtle" onclick="showPage('listings')">Genzura amatangazo →</button>
       </div>
 
       <div class="table-wrap">
-
         <table>
-
           <thead>
             <tr>
               <th>ID</th>
@@ -246,57 +148,32 @@
               <th>IGIKORWA</th>
             </tr>
           </thead>
-
           <tbody id="overviewListingRows">
-
-            <tr>
-              <td colspan="6">
-                Tegereza amakuru ava muri database...
-              </td>
-            </tr>
-
+            <tr><td colspan="6">Tegereza amakuru ava muri database...</td></tr>
           </tbody>
-
         </table>
-
       </div>
-
     </article>
-
   </section>
 
-
   <!-- LISTINGS -->
-
   <section id="listings" class="page">
 
     <div class="section-intro">
       <h2>Gucunga amatangazo</h2>
-
-      <p>
-        Genzer(a), emeza, uhagarike cyangwa uhindure
-        amatangazo mbere yo kuyashyira ku rubuga.
-      </p>
+      <p>Genzer(a), emeza, uhagarike cyangwa uhindure amatangazo mbere yo kuyashyira ku rubuga.</p>
     </div>
 
-
-    <!-- ADMIN LISTING CREATION FORM -->
-
     <article class="panel admin-listing-form">
-
       <div class="panel-head">
         <div>
           <h3>Ongeramo itangazo rishya</h3>
-          <p>
-            Shyiramo amakuru y'inzu, ubutaka cyangwa imodoka.
-          </p>
+          <p>Shyiramo amakuru y'inzu, ubutaka cyangwa imodoka.</p>
         </div>
       </div>
 
       <form id="adminListingForm">
-
         <div class="admin-form-grid">
-
           <label>
             Ubwoko bw'itangazo
             <select id="adminListingType" name="type" required>
@@ -307,179 +184,84 @@
             </select>
           </label>
 
-
           <label>
             Umutwe w'itangazo
-            <input
-              type="text"
-              name="title"
-              required
-              placeholder="Urugero: Inzu nziza i Kigali"
-            >
+            <input type="text" name="title" required placeholder="Urugero: Inzu nziza i Kigali">
           </label>
-
 
           <label>
             Igihugu
-            <select
-              id="adminListingCountry"
-              name="country"
-              required
-            >
+            <select id="adminListingCountry" name="country" required>
               <option value="">Hitamo igihugu</option>
               <option value="Rwanda">Rwanda</option>
               <option value="Kenya">Kenya</option>
             </select>
           </label>
 
-
           <label>
             Intara / County
-            <input
-              type="text"
-              name="province"
-              required
-              placeholder="Urugero: Kigali"
-            >
+            <input type="text" name="province" required placeholder="Urugero: Kigali">
           </label>
-
 
           <label>
             Akarere / District
-            <input
-              type="text"
-              name="district"
-              required
-              placeholder="Andika akarere"
-            >
+            <input type="text" name="district" required placeholder="Andika akarere">
           </label>
-
 
           <label>
             Umurenge / Ahantu
-            <input
-              type="text"
-              name="locality"
-              required
-              placeholder="Andika umurenge cyangwa ahantu"
-            >
+            <input type="text" name="locality" required placeholder="Andika umurenge cyangwa ahantu">
           </label>
-
 
           <label>
             Igiciro
-            <input
-              type="number"
-              name="price"
-              min="0"
-              step="any"
-              required
-              placeholder="Andika igiciro"
-            >
+            <input type="number" name="price" min="0" step="any" required placeholder="Andika igiciro">
           </label>
-
 
           <label>
             Ifaranga
-            <select
-              id="adminListingCurrency"
-              name="currency"
-              required
-            >
+            <select id="adminListingCurrency" name="currency" required>
               <option value="">Hitamo ifaranga</option>
               <option value="RWF">RWF</option>
               <option value="KES">KES</option>
             </select>
           </label>
-
         </div>
 
-
-        <!-- HOUSE RENT OR SALE -->
-
-        <div
-          id="adminHouseFields"
-          class="admin-extra-fields"
-          hidden
-        >
-
+        <div id="adminHouseFields" class="admin-extra-fields" hidden>
           <label>
             Inzu irakodeshwa cyangwa iragurishwa?
-
-            <select
-              id="adminTransactionType"
-              name="transactionType"
-            >
+            <select id="adminTransactionType" name="transactionType">
               <option value="">Hitamo</option>
               <option value="RENT">For Rent - Gukodesha</option>
               <option value="SALE">For Sale - Kugurisha</option>
             </select>
           </label>
-
         </div>
-
 
         <label class="admin-full-field">
           Ibisobanuro birambuye
-
-          <textarea
-            name="description"
-            minlength="20"
-            maxlength="5000"
-            required
-            placeholder="Sobanura neza itangazo ryawe..."
-          ></textarea>
+          <textarea name="description" minlength="20" maxlength="5000" required placeholder="Sobanura neza itangazo ryawe..."></textarea>
         </label>
 
-
         <div class="admin-form-grid">
-
           <label>
             Amafoto y'itangazo
-
-            <input
-              id="adminListingImages"
-              type="file"
-              accept="image/*"
-              multiple
-            >
+            <input id="adminListingImages" type="file" accept="image/*" multiple>
           </label>
-
 
           <label>
             Video y'itangazo (ntibitegetswe)
-
-            <input
-              id="adminListingVideo"
-              type="file"
-              accept="video/*"
-            >
+            <input id="adminListingVideo" type="file" accept="video/*">
           </label>
-
         </div>
 
-
-        <button
-          id="adminListingSubmit"
-          type="submit"
-          class="primary"
-        >
-          Ongeraho itangazo
-        </button>
-
+        <button id="adminListingSubmit" type="submit" class="primary">Ongeraho itangazo</button>
       </form>
-
     </article>
 
-    <!-- END ADMIN LISTING CREATION FORM -->
-
-
     <div class="filter-row">
-
-      <input
-        id="listingSearch"
-        placeholder="Shakisha ID, izina cyangwa ahantu..."
-      >
+      <input id="listingSearch" placeholder="Shakisha ID, izina cyangwa ahantu...">
 
       <select id="listingFilter">
         <option value="all">Amatangazo yose</option>
@@ -495,16 +277,11 @@
         <option>Rwanda</option>
         <option>Kenya</option>
       </select>
-
     </div>
 
-
     <div class="panel">
-
       <div class="table-wrap">
-
         <table>
-
           <thead>
             <tr>
               <th>ID</th>
@@ -515,48 +292,25 @@
               <th>IGIKORWA</th>
             </tr>
           </thead>
-
           <tbody id="listingRows">
-            <tr>
-              <td colspan="6">Tegereza...</td>
-            </tr>
+            <tr><td colspan="6">Tegereza...</td></tr>
           </tbody>
-
         </table>
-
       </div>
-
     </div>
 
-    <p class="demo-hint">
-      Amatangazo azerekanwa hakoreshejwe amakuru
-      ava muri database ya TikTak.
-    </p>
-
+    <p class="demo-hint">Amatangazo azerekanwa hakoreshejwe amakuru ava muri database ya TikTak.</p>
   </section>
 
-
   <!-- REQUESTS -->
-
   <section id="requests" class="page">
-
     <div class="section-intro">
-
       <h2>Ibyifuzo by'abaguzi</h2>
-
-      <p>
-        Aha hazajya hagaragara ibyifuzo by'abaguzi
-        byakiriwe na TikTak.
-      </p>
-
+      <p>Aha hazajya hagaragara ibyifuzo by'abaguzi byakiriwe na TikTak.</p>
     </div>
 
     <div class="filter-row">
-
-      <input
-        id="requestSearch"
-        placeholder="Shakisha REQ, izina cyangwa itangazo..."
-      >
+      <input id="requestSearch" placeholder="Shakisha REQ, izina cyangwa itangazo...">
 
       <select id="requestFilter">
         <option value="all">Ibyifuzo byose</option>
@@ -565,46 +319,24 @@
         <option>Negotiation</option>
         <option>Byarangiye</option>
       </select>
-
     </div>
 
     <div class="panel" id="requestRows">
-
-      <div class="empty-state">
-        Ibyifuzo ntibirahuzwa na database.
-      </div>
-
+      <div class="empty-state">Ibyifuzo ntibirahuzwa na database.</div>
     </div>
 
-    <p class="demo-hint">
-      Ibyifuzo nyakuri bizagaragara nyuma yo gushyiraho
-      API yabyo.
-    </p>
-
+    <p class="demo-hint">Ibyifuzo nyakuri bizagaragara nyuma yo gushyiraho API yabyo.</p>
   </section>
 
-
   <!-- CLIENTS -->
-
   <section id="clients" class="page">
-
     <div class="section-intro">
-
       <h2>Abakiriya</h2>
-
-      <p>
-        Abagura n'abagurisha biyandikishije kuri TikTak.
-        Amakuru yabo ava muri database.
-      </p>
-
+      <p>Abagura n'abagurisha biyandikishije kuri TikTak. Amakuru yabo ava muri database.</p>
     </div>
 
     <div class="filter-row">
-
-      <input
-        id="clientSearch"
-        placeholder="Shakisha izina, telefone cyangwa igihugu..."
-      >
+      <input id="clientSearch" placeholder="Shakisha izina, telefone cyangwa igihugu...">
 
       <select id="clientRole">
         <option value="all">Roles zose</option>
@@ -613,15 +345,11 @@
         <option value="AGENT">Agent</option>
         <option value="ADMIN">Admin</option>
       </select>
-
     </div>
 
     <div class="panel">
-
       <div class="table-wrap">
-
         <table>
-
           <thead>
             <tr>
               <th>IZINA</th>
@@ -632,47 +360,25 @@
               <th>IGIKORWA</th>
             </tr>
           </thead>
-
           <tbody id="clientRows">
-            <tr>
-              <td colspan="6">Tegereza...</td>
-            </tr>
+            <tr><td colspan="6">Tegereza...</td></tr>
           </tbody>
-
         </table>
-
       </div>
-
     </div>
 
-    <p id="clientStatus" class="demo-hint">
-      Abakiriya bazagaragara nyuma yo kwinjira nka Admin.
-    </p>
-
+    <p id="clientStatus" class="demo-hint">Abakiriya bazagaragara nyuma yo kwinjira nka Admin.</p>
   </section>
 
-
   <!-- DEALS -->
-
   <section id="deals" class="page">
-
     <div class="section-intro">
-
       <h2>Amasezerano y'ubucuruzi</h2>
-
-      <p>
-        Kurikirana intambwe z'igurisha kuva ku biganiro
-        kugeza ryemejwe ko rirangiye.
-      </p>
-
+      <p>Kurikirana intambwe z'igurisha kuva ku biganiro kugeza ryemejwe ko rirangiye.</p>
     </div>
 
     <div class="filter-row">
-
-      <input
-        id="dealSearch"
-        placeholder="Shakisha Deal ID cyangwa igicuruzwa..."
-      >
+      <input id="dealSearch" placeholder="Shakisha Deal ID cyangwa igicuruzwa...">
 
       <select id="dealFilter">
         <option value="all">Ibyiciro byose</option>
@@ -682,15 +388,11 @@
         <option>Sale Completed</option>
         <option>Disputed</option>
       </select>
-
     </div>
 
     <div class="panel">
-
       <div class="table-wrap">
-
         <table>
-
           <thead>
             <tr>
               <th>DEAL ID</th>
@@ -701,39 +403,21 @@
               <th>IGIKORWA</th>
             </tr>
           </thead>
-
           <tbody id="dealRows">
-            <tr>
-              <td colspan="6">Tegereza...</td>
-            </tr>
+            <tr><td colspan="6">Tegereza...</td></tr>
           </tbody>
-
         </table>
-
       </div>
-
     </div>
 
-
     <div class="panel calculator">
-
       <h3>Ibariro rya komisiyo ya 5%</h3>
-
-      <p>
-        Komisiyo ibarwa ku giciro cyose cy'igurisha
-        kandi yishyurwa n'umugurisha.
-      </p>
+      <p>Komisiyo ibarwa ku giciro cyose cy'igurisha kandi yishyurwa n'umugurisha.</p>
 
       <div class="calc-row">
-
         <label>
           Igiciro cya nyuma
-          <input
-            id="salePrice"
-            type="number"
-            min="0"
-            placeholder="Urugero: 1000000"
-          >
+          <input id="salePrice" type="number" min="0" placeholder="Urugero: 1000000">
         </label>
 
         <label>
@@ -748,40 +432,22 @@
           <small>Komisiyo ya TikTak (5%)</small>
           <strong id="commissionResult">0 RWF</strong>
         </div>
-
       </div>
-
     </div>
 
-    <p class="demo-hint">
-      Kwemeza igurisha bigomba gushingira ku bimenyetso
-      n'amasezerano y'impande bireba.
-    </p>
-
+    <p class="demo-hint">Kwemeza igurisha bigomba gushingira ku bimenyetso n'amasezerano y'impande bireba.</p>
   </section>
 
-
   <!-- COMMISSIONS -->
-
   <section id="commissions" class="page">
-
     <div class="section-intro">
-
       <h2>Komisiyo ya TikTak</h2>
-
-      <p>
-        Komisiyo ni 5% by'igiciro cyose cy'igurisha,
-        yishyurwa n'umugurisha.
-      </p>
-
+      <p>Komisiyo ni 5% by'igiciro cyose cy'igurisha, yishyurwa n'umugurisha.</p>
     </div>
 
     <div class="panel">
-
       <div class="table-wrap">
-
         <table>
-
           <thead>
             <tr>
               <th>AMASEZERANO</th>
@@ -792,69 +458,38 @@
               <th>IGIKORWA</th>
             </tr>
           </thead>
-
           <tbody id="commissionRows">
-            <tr>
-              <td colspan="6">
-                Komisiyo zizagaragara nyuma yo kuzihuza na database.
-              </td>
-            </tr>
+            <tr><td colspan="6">Komisiyo zizagaragara nyuma yo kuzihuza na database.</td></tr>
           </tbody>
-
         </table>
-
       </div>
-
     </div>
 
     <div class="panel note">
-      Kwakira Mobile Money cyangwa bank transfer no kwemeza
-      ubwishyu bizakorwa nyuma yo guhuza payment provider
-      no kugenzura konti zakira amafaranga.
+      Kwakira Mobile Money cyangwa bank transfer no kwemeza ubwishyu bizakorwa nyuma yo guhuza payment provider no kugenzura konti zakira amafaranga.
     </div>
 
     <div class="panel">
-
       <h3>Intambwe zo kwishyura</h3>
-
       <ol>
         <li>Admin yemeza ko igurisha ryarangiye.</li>
         <li>Sisitemu ibara 5% by'igiciro cya nyuma.</li>
         <li>Umugurisha ahabwa amabwiriza yo kwishyura.</li>
-        <li>
-          Admin agenzura Mobile Money cyangwa bank transfer,
-          akandika ko komisiyo yishyuwe.
-        </li>
+        <li>Admin agenzura Mobile Money cyangwa bank transfer, akandika ko komisiyo yishyuwe.</li>
       </ol>
-
-      <p class="demo-hint">
-        Ntukandike ko ubwishyu bwemejwe utarabugenzura.
-      </p>
-
+      <p class="demo-hint">Ntukandike ko ubwishyu bwemejwe utarabugenzura.</p>
     </div>
-
   </section>
 
-
   <!-- MESSAGES -->
-
   <section id="messages" class="page">
-
     <div class="section-intro">
-
       <h2>Ubutumwa bwa TikTak</h2>
-
-      <p>
-        Admin ni we uganira n'abakiriya.
-        Umuguzi n'umugurisha ntibandikirana kuri uru rubuga.
-      </p>
-
+      <p>Admin ni we uganira n'abakiriya. Umuguzi n'umugurisha ntibandikirana kuri uru rubuga.</p>
     </div>
 
     <div class="message-layout">
-
       <div class="panel inbox">
-
         <div class="panel-head">
           <div>
             <h3>Inbox</h3>
@@ -863,92 +498,70 @@
         </div>
 
         <div id="threadList">
-
-          <div class="empty-state">
-            Ubutumwa ntiburahuzwa na database.
-          </div>
-
+          <div class="empty-state">Ubutumwa ntiburahuzwa na database.</div>
         </div>
-
       </div>
 
-
       <div class="panel chat">
-
         <div class="chat-head">
-
           <div>
             <b id="chatName">Hitamo umukiriya</b>
-            <small id="chatMeta">
-              Ibiganiro bya TikTak Admin
-            </small>
+            <small id="chatMeta">Ibiganiro bya TikTak Admin</small>
           </div>
-
           <span class="pill live">Private</span>
-
         </div>
 
         <div id="chatMessages" class="chat-messages">
-
-          <div class="empty-state">
-            Hitamo ikiganiro kiri ibumoso kugira ngo urebe ubutumwa.
-          </div>
-
+          <div class="empty-state">Hitamo ikiganiro kiri ibumoso kugira ngo urebe ubutumwa.</div>
         </div>
 
         <form id="replyForm" class="reply-form">
-
-          <input
-            id="replyText"
-            placeholder="Andika igisubizo..."
-            autocomplete="off"
-          >
-
-          <button class="primary" type="submit">
-            Ohereza
-          </button>
-
+          <input id="replyText" placeholder="Andika igisubizo..." autocomplete="off">
+          <button class="primary" type="submit">Ohereza</button>
         </form>
-
       </div>
-
     </div>
 
-    <p class="demo-hint">
-      Ubutumwa nyakuri buzoherezwa nyuma yo gushyiraho
-      no guhuza API y'ubutumwa.
-    </p>
-
+    <p class="demo-hint">Ubutumwa nyakuri buzoherezwa nyuma yo gushyiraho no guhuza API y'ubutumwa.</p>
   </section>
 
-
   <!-- REPORTS -->
-
   <section id="reports" class="page">
 
     <div class="section-intro">
-
       <h2>Raporo n'isesengura</h2>
+      <p>Amakuru y'abasura urubuga, amatangazo arebwa cyane, ibyifuzo n'ubucuruzi.</p>
+    </div>
 
-      <p>
-        Amakuru y'abasura urubuga, amatangazo arebwa cyane,
-        ibyifuzo n'ubucuruzi.
-      </p>
+    <div class="filter-row">
+      <label for="analyticsPeriod">Igihe cya raporo</label>
 
+      <select id="analyticsPeriod">
+        <option value="day">Uyu munsi</option>
+        <option value="week" selected>Iki cyumweru</option>
+        <option value="month">Uku kwezi</option>
+      </select>
+
+      <button type="button" class="primary" id="refreshAnalytics">Ongera urebe</button>
     </div>
 
     <div class="stats">
+      <article class="stat">
+        <span>Abasura batandukanye</span>
+        <strong id="reportVisitors">-</strong>
+        <small>Browsers / devices</small>
+      </article>
 
       <article class="stat">
-        <span>Abasura urubuga</span>
-        <strong>-</strong>
-        <small>Ntibirahuzwa na analytics</small>
+        <span>Page visits zose</span>
+        <strong id="reportVisits">-</strong>
+        <small>Uko paji zasuwe</small>
       </article>
 
       <article class="stat">
         <span>Amatangazo arebwe</span>
-        <strong>-</strong>
-        <small>Ntibirahuzwa na analytics</small>
+        <strong id="reportListingViews">-</strong>
+        <small>Views z'amatangazo</small>
       </article>
 
       <article class="stat">
@@ -956,79 +569,98 @@
         <strong id="reportCompleted">-</strong>
         <small>Amakuru ava muri database</small>
       </article>
-
     </div>
 
-    <div class="panel note">
-      Raporo z'ukuri zizagaragaza imibare ya buri munsi,
-      icyumweru n'ukwezi nyuma yo guhuza database na analytics.
+    <article class="panel">
+      <div class="panel-head">
+        <div>
+          <h3>Amatangazo arebwa cyane</h3>
+          <p>Top 10 listings</p>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ITANGAZO</th>
+              <th>VIEWS</th>
+            </tr>
+          </thead>
+          <tbody id="reportTopListings">
+            <tr><td colspan="2">Tegereza amakuru...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-head">
+        <div>
+          <h3>Imibare y'igihe</h3>
+          <p id="analyticsPeriodLabel">Africa/Kigali</p>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>IGIHE</th>
+              <th>VISITS</th>
+              <th>ABASURA</th>
+            </tr>
+          </thead>
+          <tbody id="reportAnalyticsRows">
+            <tr><td colspan="3">Tegereza amakuru...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+
+    <div class="panel note" id="analyticsStatus">
+      Raporo zirimo gutegurwa...
     </div>
 
   </section>
 
-
-  <footer>
-    © TikTak Real Estate · Owner Administration
-  </footer>
-
+  <footer>© TikTak Real Estate · Owner Administration</footer>
 </main>
 
-
 <div id="toast" class="toast"></div>
-
 
 <script src="api.js"></script>
 <script src="admin.js"></script>
 
-
 <script>
 (function () {
-
   let user = null;
 
   try {
-    user = JSON.parse(
-      localStorage.getItem('tiktak-user') || 'null'
-    );
+    user = JSON.parse(localStorage.getItem('tiktak-user') || 'null');
   } catch (error) {
     user = null;
   }
 
   const token = localStorage.getItem('tiktak-token');
-
   const nameElement = document.getElementById('sessionName');
   const avatarElement = document.getElementById('adminAvatar');
   const logoutButton = document.getElementById('logout');
 
   if (user && token) {
+    const name = user.fullName || user.name || user.email || 'Admin';
 
-    const name =
-      user.fullName ||
-      user.name ||
-      user.email ||
-      'Admin';
-
-    nameElement.textContent =
-      name + ' · ' + (user.role || 'ADMIN');
-
-    avatarElement.textContent =
-      name.charAt(0).toUpperCase();
-
+    nameElement.textContent = name + ' · ' + (user.role || 'ADMIN');
+    avatarElement.textContent = name.charAt(0).toUpperCase();
   } else {
-
     nameElement.textContent = 'Nta winjiye';
-
   }
 
   logoutButton.addEventListener('click', function () {
-
     localStorage.removeItem('tiktak-token');
     localStorage.removeItem('tiktak-user');
-
     window.location.href = 'account.html';
-
   });
-
 })();
 </script>
 
