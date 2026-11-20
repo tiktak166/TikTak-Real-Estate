@@ -1,4 +1,4 @@
-/* =========================================================
+﻿/* =========================================================
    TIKTAK REAL ESTATE - ADMIN DASHBOARD
    Real database integration
 ========================================================= */
@@ -161,7 +161,7 @@ async function renderAnalytics() {
 
     if (status) {
       status.textContent =
-        `Raporo ivuye muri database. Igihe: ${data.timezone || 'Africa/Kigali'}. Abasura ni browsers/devices byihariye, si umubare wâ€™abantu bemejwe.`;
+        `Raporo ivuye muri database. Igihe: ${data.timezone || 'Africa/Kigali'}. Abasura ni browsers/devices byihariye, si umubare wÃ¢â‚¬â„¢abantu bemejwe.`;
     }
 
   } catch (error) {
@@ -218,7 +218,7 @@ nav.forEach(item => {
 ========================================================= */
 
 async function renderDashboard() {
-  setSystemStatus('● Igenzura rya database...');
+  setSystemStatus('â— Igenzura rya database...');
 
   try {
     const [overview, listingData] = await Promise.all([
@@ -261,7 +261,7 @@ async function renderDashboard() {
           const currency = item.currency || '';
           const amount = item._sum?.amount || 0;
           return money(amount, currency);
-        }).join(' · ')
+        }).join(' Â· ')
       : '0';
 
     if (commissionElement) {
@@ -275,7 +275,7 @@ async function renderDashboard() {
     if (activity) {
       activity.innerHTML = `
         <div class="activity">
-          <span class="activity-icon gray">⌂</span>
+          <span class="activity-icon gray">âŒ‚</span>
           <div>
             <b>Amatangazo ari muri database</b>
             <p>${Number(overview.listings || 0)} yose</p>
@@ -283,7 +283,7 @@ async function renderDashboard() {
         </div>
 
         <div class="activity">
-          <span class="activity-icon yellow">✉</span>
+          <span class="activity-icon yellow">âœ‰</span>
           <div>
             <b>Amatangazo ategereje kwemezwa</b>
             <p>${Number(overview.pendingListings || 0)} asuzumwa</p>
@@ -291,7 +291,7 @@ async function renderDashboard() {
         </div>
 
         <div class="activity">
-          <span class="activity-icon green">✓</span>
+          <span class="activity-icon green">âœ“</span>
           <div>
             <b>Amasezerano yarangiye</b>
             <p>${Number(overview.completedDeals || 0)} yemejwe</p>
@@ -300,10 +300,10 @@ async function renderDashboard() {
       `;
     }
 
-    setSystemStatus('● Database ihujwe neza', true);
+    setSystemStatus('â— Database ihujwe neza', true);
 
   } catch (error) {
-    setSystemStatus('● Database ntibashije kuyihuza');
+    setSystemStatus('â— Database ntibashije kuyihuza');
 
     const ids = [
       'overviewListings',
@@ -454,7 +454,7 @@ async function renderListings() {
         <td>
           ${escapeAdmin(item.title)}
           <br>
-          <small>${escapeAdmin(item.type)} · ${escapeAdmin(item.transactionType)}</small>
+          <small>${escapeAdmin(item.type)} Â· ${escapeAdmin(item.transactionType)}</small>
         </td>
 
         <td>${money(item.price, item.currency)}</td>
@@ -540,7 +540,7 @@ async function listingAction(id, status) {
       body: JSON.stringify({ status })
     });
 
-    toast('Imiterere y’itangazo yahinduwe neza.');
+    toast('Imiterere yâ€™itangazo yahinduwe neza.');
 
     await renderListings();
     await renderDashboard();
@@ -845,7 +845,7 @@ async function changeDeal(id, status) {
       }
     );
 
-    toast('Intambwe y’amasezerano yahinduwe neza.');
+    toast('Intambwe yâ€™amasezerano yahinduwe neza.');
 
     await renderDeals();
     await renderDashboard();
@@ -962,13 +962,13 @@ async function renderCommissions() {
 
 async function markCommissionPaid(id) {
   const reference = window.prompt(
-    'Andika reference y’ubwishyu umaze kugenzura ko amafaranga yageze kuri konti ya TikTak:'
+    'Andika reference yâ€™ubwishyu umaze kugenzura ko amafaranga yageze kuri konti ya TikTak:'
   );
 
   if (reference === null) return;
 
   if (!reference.trim()) {
-    toast('Reference y’ubwishyu irakenewe.');
+    toast('Reference yâ€™ubwishyu irakenewe.');
     return;
   }
 
@@ -1010,8 +1010,24 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('analyticsPeriod')
     ?.addEventListener('change', renderAnalytics);
 
-  document.getElementById('refreshAnalytics')
-    ?.addEventListener('click', renderAnalytics);
+  const refreshButton = document.getElementById('refreshAnalytics');
+
+  if (refreshButton) {
+    refreshButton.addEventListener('click', async () => {
+      if (refreshButton.disabled) return;
+
+      const originalLabel = refreshButton.textContent;
+      refreshButton.disabled = true;
+      refreshButton.textContent = 'Birimo kuvugurura...';
+
+      try {
+        await renderAnalytics();
+      } finally {
+        refreshButton.disabled = false;
+        refreshButton.textContent = originalLabel;
+      }
+    });
+  }
 });
 /* =========================================================
    ADMIN CREATE LISTING FORM
