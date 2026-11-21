@@ -421,3 +421,101 @@ body.contact-modal-open{overflow:hidden}
     text-align: center;
   }
 }
+
+/* TIKTAK FLOATING WHATSAPP BUTTON */
+.tiktak-floating-whatsapp {
+  position: fixed;
+  right: 26px;
+  bottom: 28px;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-height: 76px;
+  padding: 12px 24px 12px 15px;
+  border: 3px solid #ffffff;
+  border-radius: 50px;
+  background: #16c766;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 17px;
+  font-weight: 800;
+  box-shadow: 0 8px 28px rgba(0, 120, 60, .38);
+  animation: tiktakWhatsAppFloat 2.2s ease-in-out infinite;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.tiktak-floating-whatsapp:hover {
+  transform: scale(1.07);
+  box-shadow: 0 12px 34px rgba(0, 120, 60, .48);
+}
+
+.tiktak-whatsapp-icon {
+  width: 49px;
+  height: 49px;
+  flex: 0 0 49px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #16b95e;
+}
+
+.tiktak-whatsapp-icon svg {
+  width: 39px;
+  height: 39px;
+}
+
+.tiktak-whatsapp-label {
+  position: relative;
+  z-index: 2;
+  white-space: nowrap;
+}
+
+.tiktak-whatsapp-pulse {
+  position: absolute;
+  inset: -7px;
+  border: 3px solid #16c766;
+  border-radius: 55px;
+  animation: tiktakWhatsAppPulse 2.2s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes tiktakWhatsAppFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-9px); }
+}
+
+@keyframes tiktakWhatsAppPulse {
+  0% { opacity: .75; transform: scale(.96); }
+  100% { opacity: 0; transform: scale(1.13); }
+}
+
+@media (max-width: 650px) {
+  .tiktak-floating-whatsapp {
+    right: 14px;
+    bottom: 18px;
+    min-height: 65px;
+    gap: 9px;
+    padding: 9px 15px 9px 10px;
+    font-size: 14px;
+  }
+
+  .tiktak-whatsapp-icon {
+    width: 43px;
+    height: 43px;
+    flex-basis: 43px;
+  }
+
+  .tiktak-whatsapp-icon svg {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tiktak-floating-whatsapp,
+  .tiktak-whatsapp-pulse {
+    animation: none;
+  }
+}
